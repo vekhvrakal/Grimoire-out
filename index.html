@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carte du Royaume & Grimoire Sécurisé</title>
+  <title>Carte du Royaume & Grimoire D'Exploration</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
     :root {
@@ -25,6 +25,26 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
     body { background: var(--bg-dark); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
 
+    /* ÉCRAN DE VERROUILLAGE */
+    #lock-screen {
+      position: fixed; inset: 0; background: var(--bg-dark); z-index: 9999;
+      display: flex; justify-content: center; align-items: center; flex-direction: column;
+    }
+    .lock-card {
+      background: var(--panel-bg); border: 1px solid var(--border); padding: 30px;
+      border-radius: 12px; width: 360px; text-align: center; display: flex; flex-direction: column; gap: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+    .lock-card h2 { color: var(--gold); font-size: 1.3em; }
+    .lock-card input {
+      width: 100%; background: var(--card-bg); border: 1px solid var(--border);
+      padding: 10px; border-radius: 6px; color: #fff; outline: none; text-align: center; font-size: 1em;
+    }
+    .lock-card button {
+      background: var(--accent-gradient); color: #fff; border: none; padding: 10px;
+      border-radius: 6px; font-weight: bold; cursor: pointer; transition: opacity 0.2s;
+    }
+
     /* MENU VERTICAL GAUCHE */
     .nav-sidebar {
       width: 60px; background: var(--sidebar-left); border-right: 1px solid var(--border);
@@ -33,7 +53,7 @@
     .nav-btn {
       width: 44px; height: 44px; border-radius: 10px; background: transparent; border: none;
       color: var(--text-muted); cursor: pointer; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; font-size: 0.65em; gap: 3px; font-weight: 600;
+      align-items: center; justify-content: center; font-size: 0.6em; gap: 3px; font-weight: 600;
     }
     .nav-btn span { font-size: 1.3em; }
     .nav-btn:hover, .nav-btn.active { background: var(--card-bg); color: #fff; }
@@ -45,7 +65,7 @@
       display: flex; justify-content: space-between; align-items: center; padding: 0 20px; font-weight: bold;
     }
     .top-actions { display: flex; gap: 8px; align-items: center; }
-    .btn-sm { background: var(--accent); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
+    .btn-sm { background: var(--accent); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 4px; }
     .btn-sm:hover { opacity: 0.9; }
     .btn-dark { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); }
     .btn-danger { background: rgba(239, 68, 68, 0.2); border: 1px solid var(--danger); color: var(--danger); }
@@ -53,121 +73,167 @@
     .view-content { display: none; width: 100%; height: calc(100vh - 48px); }
     .view-content.active { display: flex; }
 
-    /* 1. CARTE */
+    /* CARTE */
     .map-sidebar { width: 280px; background: var(--panel-bg); border-right: 1px solid var(--border); padding: 15px; display: flex; flex-direction: column; gap: 15px; overflow-y: auto; font-size: 0.85em; }
-    .section-title { font-size: 0.75em; font-weight: bold; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: flex; justify-content: space-between; }
+    .section-title { font-size: 0.75em; font-weight: bold; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
     #map-wrapper { flex: 1; position: relative; }
-    #map { width: 100%; height: 100%; background: #000; }
+    #map { width: 100%; height: 100%; background: #000; cursor: crosshair; }
 
-    /* 2. MARCHANDS */
+    .custom-map-marker {
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 8px rgba(0,0,0,0.6); font-size: 14px;
+      border: 2px solid #fff; transition: transform 0.2s; overflow: hidden;
+    }
+    .custom-map-marker:hover { transform: scale(1.2); z-index: 1000 !important; }
+    .custom-map-marker.circle { border-radius: 50%; }
+    .custom-map-marker.square { border-radius: 6px; }
+
+    .leaflet-popup-content-wrapper { background: var(--panel-bg) !important; color: var(--text) !important; border: 1px solid var(--border); border-radius: 8px; }
+    .leaflet-popup-tip { background: var(--panel-bg) !important; }
+    .marker-popup-title { font-weight: bold; font-size: 1.1em; color: #fff; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+    .marker-popup-cat { font-size: 0.75em; color: var(--gold); text-transform: uppercase; font-weight: 600; }
+    .marker-popup-desc { font-size: 0.85em; color: var(--text-muted); margin: 8px 0; white-space: pre-wrap; }
+
+    /* MARCHANDS */
     .shops-sidebar { width: 240px; background: var(--panel-bg); border-right: 1px solid var(--border); padding: 15px; display: flex; flex-direction: column; gap: 8px; }
     .shop-menu-item { padding: 10px 12px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 0.9em; }
     .shop-menu-item.active { border-color: var(--accent); background: var(--card-inner); }
     .items-grid { flex: 1; padding: 20px; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; align-content: start; }
     .item-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px; position: relative; }
     .item-card-title { font-weight: bold; font-size: 0.95em; color: #fff; }
+    .price-box-container { display: flex; gap: 6px; }
+    .price-box { flex: 1; background: var(--card-inner); border: 1px solid var(--border); border-radius: 6px; padding: 6px; text-align: center; }
+    .price-label { font-size: 0.65em; color: var(--text-muted); text-transform: uppercase; }
+    .price-val { font-weight: bold; font-size: 1.1em; color: var(--gold); }
 
-    /* 3. COURS & NOTES */
+    /* COURS & NOTES */
     .courses-layout { display: flex; width: 100%; height: 100%; }
     .courses-sidebar { width: 300px; background: var(--panel-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 16px; gap: 12px; overflow-y: auto; }
-    .courses-content { flex: 1; padding: 32px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; position: relative; }
+    .year-accordion { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 8px; }
+    .year-header { padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600; font-size: 0.9em; }
+    .year-body { display: none; padding: 8px; background: var(--panel-bg); border-top: 1px solid var(--border); }
+    .year-accordion.open .year-body { display: block; }
+    .subject-item { padding: 8px 10px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; margin-top: 4px; font-size: 0.85em; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .subject-item:hover, .subject-item.active { border-color: var(--accent); background: var(--card-inner); }
+    .courses-content { flex: 1; padding: 32px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; }
     .courses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; width: 100%; max-width: 1000px; margin-top: 20px; }
     .course-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px; position: relative; display: flex; flex-direction: column; justify-content: space-between; }
     .del-btn-icon { background: transparent; border: none; color: var(--danger); cursor: pointer; font-size: 0.85em; opacity: 0.7; }
-    .del-btn-icon:hover { opacity: 1; }
 
-    /* 4. TO-DO */
+    /* TO-DO */
     .todo-layout { width: 100%; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; max-width: 1100px; margin: 0 auto; }
     .progress-card { background: var(--panel-bg); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
     .progress-bar-bg { width: 100%; height: 10px; background: var(--bg-dark); border-radius: 5px; overflow: hidden; margin-top: 10px; border: 1px solid var(--border); }
     .progress-bar-fill { height: 100%; background: var(--accent-gradient); width: 0%; transition: width 0.3s; }
+    .todo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+    .todo-card { background: var(--panel-bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
 
-    /* MODALE AJOUT DE POINT (Corrigé au premier plan) */
-    .modal-overlay { 
-      display: none; 
-      position: fixed; 
-      inset: 0; 
-      background: rgba(0,0,0,0.8); 
-      z-index: 99999; 
-      justify-content: center; 
-      align-items: center; 
-    }
+    /* RESSOURCES / MODÈLES */
+    .presets-layout { padding: 24px; width: 100%; max-width: 1000px; margin: 0 auto; overflow-y: auto; }
+    .presets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-top: 16px; }
+    .preset-card { background: var(--panel-bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+
+    /* MODALES */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 2000; justify-content: center; align-items: center; }
     .modal-overlay.active { display: flex; }
-    .modal-box { 
-      background: var(--panel-bg); 
-      border: 1px solid var(--border); 
-      padding: 20px; 
-      border-radius: 10px; 
-      width: 420px; 
-      max-width: 90%; 
-      display: flex; 
-      flex-direction: column; 
-      gap: 12px; 
-      position: relative;
-      z-index: 100000;
-    }
-    .modal-box select, .modal-box input { width: 100%; background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; padding: 8px; color: #fff; outline: none; }
-    .search-input { width: 100%; background: var(--sidebar-left); border: 1px solid var(--border); padding: 8px 12px; border-radius: 6px; color: #fff; font-size: 0.85em; outline: none; }
+    .modal-box { background: var(--panel-bg); border: 1px solid var(--border); padding: 20px; border-radius: 10px; width: 440px; max-width: 92%; display: flex; flex-direction: column; gap: 12px; }
+    .modal-box h3 { color: #fff; font-size: 1.1em; }
+    .modal-box label { font-size: 0.8em; color: var(--text-muted); font-weight: bold; display: flex; flex-direction: column; gap: 4px; }
+    .modal-box input, .modal-box textarea, .modal-box select { width: 100%; background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; padding: 8px; color: #fff; outline: none; font-size: 0.9em; }
+    .modal-box textarea { height: 70px; resize: vertical; }
 
-    /* ÉCRAN DE SÉCURITÉ */
-    #lock-screen {
-      position: fixed; inset: 0; background: var(--bg-dark); z-index: 999999;
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px;
-    }
+    .icon-preview-box { width: 36px; height: 36px; border-radius: 6px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; overflow: hidden; background: var(--card-inner); }
+    .icon-preview-box img { width: 100%; height: 100%; object-fit: cover; }
+    .search-input { width: 100%; background: var(--sidebar-left); border: 1px solid var(--border); padding: 8px 12px; border-radius: 6px; color: #fff; font-size: 0.85em; outline: none; }
   </style>
 </head>
 <body>
 
-  <!-- ÉCRAN DE VERROUILLAGE SÉCURISÉ -->
+  <!-- ÉCRAN DE VERROUILLAGE -->
   <div id="lock-screen">
-    <div style="background:var(--panel-bg); border:1px solid var(--border); padding:30px; border-radius:12px; text-align:center; width:360px; display:flex; flex-direction:column; gap:15px;">
-      <h2 style="color:#fff;">🔒 Accès Restreint</h2>
-      <p style="font-size:0.85em; color:var(--text-muted);">Entre le mot de passe du royaume pour accéder au site.</p>
-      <input type="password" id="password-input" placeholder="Mot de passe..." style="width:100%; background:var(--card-bg); border:1px solid var(--border); padding:10px; border-radius:6px; color:#fff; text-align:center; outline:none;" />
-      <button class="btn-sm" style="justify-content:center; padding:10px;" onclick="checkPassword()">Déverrouiller</button>
+    <div class="lock-card">
+      <h2 id="lock-title">🔒 Grimoire Vérouillé</h2>
+      <p id="lock-subtitle" style="font-size:0.85em; color:var(--text-muted);">Entre ton mot de passe pour accéder à tes cartes et fiches.</p>
+      <input type="password" id="lock-input" placeholder="Mot de passe..." onkeypress="if(event.key==='Enter') verifyPassword()">
+      <button onclick="verifyPassword()" id="lock-btn">Déverrouiller</button>
+      <p id="lock-error" style="color:var(--danger); font-size:0.8em; display:none;">Mot de passe incorrect !</p>
     </div>
   </div>
 
   <!-- NAVIGATION GAUCHE -->
   <nav class="nav-sidebar">
     <button class="nav-btn active" onclick="switchView('map', this)"><span>🗺️</span>CARTE</button>
+    <button class="nav-btn" onclick="switchView('presets', this)"><span>🌿</span>PLANTES</button>
     <button class="nav-btn" onclick="switchView('shops', this)"><span>🏪</span>MARCHANDS</button>
     <button class="nav-btn" onclick="switchView('courses', this)"><span>📚</span>COURS</button>
     <button class="nav-btn" onclick="switchView('todo', this)"><span>✅</span>TO-DO</button>
+    <button class="nav-btn" style="margin-top:auto;" onclick="lockApp()" title="Verrouiller"><span>🔒</span>LOCK</button>
   </nav>
 
   <div class="app-container">
     
-    <!-- 1. VUE CARTE -->
+    <!-- 1. CARTE -->
     <div id="view-map" class="view-content active">
       <div class="map-sidebar">
         <div>
-          <div class="section-title">Mode Carte</div>
-          <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">Clique sur la carte pour placer une ressource (plante ou minerai).</p>
-          <button class="btn-sm" style="width:100%;" onclick="activateAddMode()">📌 Mode Ajout Actif</button>
+          <div class="section-title">Image de fond de la carte</div>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <label class="btn-sm btn-dark" style="cursor:pointer; width:100%;">
+              🖼️ Importer une carte (PC)
+              <input type="file" id="map-bg-file" accept="image/*" style="display:none;" onchange="changeMapBackground(event)">
+            </label>
+            <button class="btn-sm btn-danger" onclick="resetMapBackground()">🗑️ Carte par défaut</button>
+          </div>
         </div>
+
         <div>
-          <div class="section-title">Marqueurs posés</div>
-          <div id="marker-list-sidebar" style="display:flex; flex-direction:column; gap:6px; max-height:250px; overflow-y:auto;"></div>
+          <div class="section-title">Mode Carte</div>
+          <p style="font-size:0.8em; color:var(--text-muted); margin-bottom:10px;">Clique sur la carte pour placer un point d'intérêt.</p>
+          <button class="btn-sm" style="width:100%;" onclick="startAddMarkerManual()">📍 Placer un point</button>
         </div>
+
+        <div>
+          <div class="section-title">Filtrer les PNJ / Ressources</div>
+          <input type="text" class="search-input" id="map-search" placeholder="Rechercher sur la carte..." oninput="renderMapMarkers()">
+        </div>
+
+        <div>
+          <div class="section-title">Points enregistrés</div>
+          <div id="marker-list-sidebar" style="display:flex; flex-direction:column; gap:6px; max-height:200px; overflow-y:auto;"></div>
+        </div>
+
         <div style="margin-top:auto; border-top: 1px solid var(--border); padding-top:10px;">
           <div class="section-title">Statistiques</div>
-          <div style="display:flex; justify-content:space-between;"><span>Points posés</span><strong id="stat-markers-count">0</strong></div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>Total</span><strong id="stat-count">0</strong></div>
         </div>
       </div>
       <div id="map-wrapper"><div id="map"></div></div>
     </div>
 
-    <!-- 2. VUE MARCHANDS -->
+    <!-- 2. CATALOGUE DES PLANTES & RESSOURCES -->
+    <div id="view-presets" class="view-content">
+      <div class="presets-layout">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <h2>🌿 Catalogue des Ressources</h2>
+            <p style="color:var(--text-muted); font-size:0.85em; margin-top:4px;">Généré automatiquement depuis tes fichiers sans espaces ni accents.</p>
+          </div>
+          <button class="btn-sm" onclick="openPresetModal()">+ Ajouter une ressource</button>
+        </div>
+        <div class="presets-grid" id="presets-grid"></div>
+      </div>
+    </div>
+
+    <!-- 3. MARCHANDS -->
     <div id="view-shops" class="view-content">
       <div class="shops-sidebar">
-        <input type="text" class="search-input" placeholder="Rechercher un magasin...">
+        <input type="text" class="search-input" placeholder="Rechercher...">
         <button class="btn-sm" style="width:100%; margin:8px 0;" onclick="addShop()">+ Nouveau magasin</button>
         <div id="shops-menu-list"></div>
       </div>
       <div style="flex:1; display:flex; flex-direction:column;">
         <div class="top-bar">
-          <span id="current-shop-title">🏪 HERBORISTE</span>
+          <span id="current-shop-title">🏪 MARCHAND</span>
           <div class="top-actions">
             <button class="btn-sm" onclick="addItemToCurrentShop()">+ Ajouter un objet</button>
             <button class="btn-sm btn-dark" onclick="renameCurrentShop()">✏️ Renommer</button>
@@ -178,22 +244,22 @@
       </div>
     </div>
 
-    <!-- 3. VUE COURS & NOTES -->
+    <!-- 4. COURS -->
     <div id="view-courses" class="view-content">
       <div class="courses-layout">
         <div class="courses-sidebar">
-          <input type="text" class="search-input" placeholder="Rechercher un cours...">
+          <input type="text" class="search-input" placeholder="Rechercher...">
           <button class="btn-sm" style="margin:6px 0;" onclick="addYear()">+ Nouvelle année</button>
           <div id="years-list"></div>
         </div>
         <div class="courses-content">
-          <h2 style="color:var(--gold); font-size:1.3em;">📜 TES COURS</h2>
+          <h2 style="color:var(--gold); font-size:1.3em;">📜 TES COURS & FICHES</h2>
           <div class="courses-grid" id="courses-grid"></div>
         </div>
       </div>
     </div>
 
-    <!-- 4. VUE TO-DO / PROGRESSION -->
+    <!-- 5. TO-DO -->
     <div id="view-todo" class="view-content">
       <div class="todo-layout">
         <div class="progress-card">
@@ -203,225 +269,600 @@
           </div>
           <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill"></div></div>
         </div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h2>Avancement</h2>
+          <button class="btn-sm" onclick="addTodoCategory()">+ Nouvelle matière</button>
+        </div>
+        <div class="todo-grid" id="todo-grid"></div>
       </div>
     </div>
 
   </div>
 
-  <!-- MODALE : AJOUTER UN POINT SUR LA CARTE AVEC MINIATURE -->
+  <!-- MODALE : MARQUEUR -->
   <div class="modal-overlay" id="marker-modal">
     <div class="modal-box">
-      <h3>Placer une ressource sur la carte</h3>
-      <label style="font-size:0.85em; color:var(--text-muted);">Catégorie :</label>
-      <select id="modal-category-select" onchange="updateResourceDropdown()">
-        <option value="plantes">🌿 Plantes</option>
-        <option value="minerais">⛏️ Minerais</option>
-      </select>
+      <h3 id="marker-modal-title">Ajouter un point sur la carte</h3>
+      
+      <label style="background:var(--card-inner); padding:8px; border-radius:6px; border:1px solid var(--accent);">
+        ⚡ Remplissage rapide depuis tes ressources :
+        <select id="m-preset-select" onchange="applyPresetToMarkerForm(this.value)">
+          <option value="">-- Sélectionner une ressource --</option>
+        </select>
+      </label>
 
-      <label style="font-size:0.85em; color:var(--text-muted);">Ressource :</label>
-      <select id="modal-resource-select" onchange="previewThumbnail()">
-        <!-- Rempli dynamiquement -->
-      </select>
+      <label>Nom du point
+        <input type="text" id="m-name" placeholder="Nom...">
+      </label>
+      <label>Catégorie
+        <select id="m-category">
+          <option value="Plantes">🌿 Plantes</option>
+          <option value="Minerais">⛏️ Minerais</option>
+          <option value="Illégal">☠️ Illégal</option>
+          <option value="Créature magique">🐉 Créature magique</option>
+          <option value="Marchand">🏛️ Marchand</option>
+        </select>
+      </label>
 
-      <div style="display:flex; align-items:center; gap:12px; margin-top:5px; background:var(--card-bg); padding:8px; border-radius:6px; border:1px solid var(--border);">
-        <img id="modal-thumbnail-preview" src="" alt="Aperçu" style="width:40px; height:40px; object-fit:contain; border-radius:4px; display:none;" />
-        <span id="modal-preview-text" style="font-size:0.85em; color:var(--text-muted);">Sélectionne une ressource</span>
+      <div style="display:flex; gap:10px; align-items:flex-end;">
+        <label style="flex:1;">
+          Fichier image exact (ex: ameseve.png)
+          <input type="text" id="m-custom-img" placeholder="eseve.png" oninput="updateModalPreview()">
+        </label>
+        <label style="width:90px;">
+          Ou Émoji
+          <input type="text" id="m-icon" placeholder="📍" value="📍" oninput="updateModalPreview()">
+        </label>
+        <div class="icon-preview-box" id="icon-preview">📍</div>
       </div>
 
-      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:10px;">
+      <div style="display:flex; gap:10px;">
+        <label style="flex:1;">Forme
+          <select id="m-shape"><option value="square">Carré</option><option value="circle">Cercle</option></select>
+        </label>
+        <label style="flex:1;">Couleur
+          <input type="color" id="m-color" value="#6366f1" style="height:35px; cursor:pointer;">
+        </label>
+      </div>
+
+      <label>Notes
+        <textarea id="m-desc" placeholder="Détails..."></textarea>
+      </label>
+
+      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:8px;">
         <button class="btn-sm btn-dark" onclick="closeMarkerModal()">Annuler</button>
-        <button class="btn-sm" onclick="confirmAddMarker()">Placer le point</button>
+        <button class="btn-sm" onclick="saveMarkerFromModal()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODALE : PRESET -->
+  <div class="modal-overlay" id="preset-modal">
+    <div class="modal-box">
+      <h3>Ajouter un modèle de ressource</h3>
+      <label>Nom
+        <input type="text" id="p-name" placeholder="Nom...">
+      </label>
+      <label>Catégorie
+        <input type="text" id="p-category" value="Plantes">
+      </label>
+      <div style="display:flex; gap:10px;">
+        <label style="flex:1;">Nom du fichier image
+          <input type="text" id="p-custom-img" placeholder="fichier.png">
+        </label>
+        <label style="width:90px;">Émoji
+          <input type="text" id="p-icon" value="🌿">
+        </label>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <label style="flex:1;">Forme
+          <select id="p-shape"><option value="square">Carré</option><option value="circle">Cercle</option></select>
+        </label>
+        <label style="flex:1;">Couleur
+          <input type="color" id="p-color" value="#38bdf8" style="height:35px; cursor:pointer;">
+        </label>
+      </div>
+      <label>Description
+        <textarea id="p-desc"></textarea>
+      </label>
+      <div style="display:flex; justify-content:flex-end; gap:8px;">
+        <button class="btn-sm btn-dark" onclick="closePresetModal()">Annuler</button>
+        <button class="btn-sm" onclick="savePresetFromModal()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODALE : COURS -->
+  <div class="modal-overlay" id="course-modal">
+    <div class="modal-box">
+      <h3>Ajouter une fiche de cours</h3>
+      <input type="text" id="modal-course-title" placeholder="Titre...">
+      <textarea id="modal-course-desc" placeholder="Contenu..."></textarea>
+      <div style="display:flex; justify-content:flex-end; gap:8px;">
+        <button class="btn-sm btn-dark" onclick="closeModal()">Annuler</button>
+        <button class="btn-sm" onclick="saveCourseFromModal()">Enregistrer</button>
       </div>
     </div>
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    const ADMIN_PASSWORD = "RoyaumeSecret!";
+    async function hashPassword(password) {
+      const msgBuffer = new TextEncoder().encode(password);
+      const hashBuffer = await crypto.subtle ? crypto.subtle.digest('SHA-256', msgBuffer) : null;
+      if (!hashBuffer) return password;
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
 
-    function checkPassword() {
-      const input = document.getElementById('password-input').value;
-      if (input === ADMIN_PASSWORD) {
+    async function verifyPassword() {
+      const input = document.getElementById('lock-input').value;
+      if(!input) return;
+      const hashedInput = await hashPassword(input);
+      const savedHash = localStorage.getItem('appPasswordHash');
+
+      if (!savedHash) {
+        localStorage.setItem('appPasswordHash', hashedInput);
         document.getElementById('lock-screen').style.display = 'none';
-        sessionStorage.setItem('auth_granted', 'true');
-        setTimeout(() => map.invalidateSize(), 200);
+      } else if (savedHash === hashedInput) {
+        document.getElementById('lock-screen').style.display = 'none';
+        document.getElementById('lock-error').style.display = 'none';
+        document.getElementById('lock-input').value = '';
       } else {
-        alert("Mot de passe incorrect !");
+        document.getElementById('lock-error').style.display = 'block';
       }
     }
 
-    document.getElementById('password-input').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') checkPassword();
-    });
-
-    if (sessionStorage.getItem('auth_granted') === 'true') {
-      document.getElementById('lock-screen').style.display = 'none';
+    function lockApp() { document.getElementById('lock-screen').style.display = 'flex'; }
+    function checkLockStatus() {
+      if (!localStorage.getItem('appPasswordHash')) {
+        document.getElementById('lock-title').innerText = "🔑 Définir ton Mot de Passe";
+        document.getElementById('lock-subtitle').innerText = "Choisis un mot de passe pour protéger ton accès.";
+        document.getElementById('lock-btn').innerText = "Créer le mot de passe";
+      }
     }
 
-    // --- CATALOGUE DES PLANTES ET MINERAIS ---
-    const gameResources = {
-      plantes: [
-        { id: "corvafleur", name: "Corvafleur", image: "Corvafleur.jpg" },
-        { id: "dracoryne", name: "Dracoryne", image: "Dracoryne.jpg" },
-        { id: "eryndel", name: "Eryndel", image: "Eryndel.jpg" },
-        { id: "etheride", name: "Ethéride", image: "Ethéride.jpg" },
-        { id: "florombre", name: "Florombre", image: "Florombre.jpg" },
-        { id: "fogeline", name: "Fogeline", image: "Fogeline.jpg" },
-        { id: "glacepine", name: "Glacepine", image: "Glacepine.jpg" },
-        { id: "hiverine", name: "Hiverine", image: "Hiverine.jpg" },
-        { id: "lothea", name: "Lothéa", image: "Lothéa.jpg" },
-        { id: "lumignon", name: "Lumignon", image: "Lumignon.jpg" },
-        { id: "puriflor", name: "Puriflor", image: "Puriflor.jpg" },
-        { id: "roselune", name: "Roselune", image: "Roselune.jpg" },
-        { id: "sanguelis", name: "Sanguelis", image: "Sanguelis.jpg" },
-        { id: "tempesia", name: "Tempésia", image: "Tempésia.jpg" },
-        { id: "luminelle", name: "Luminelle", image: "Luminelle.jpg" },
-        { id: "mousselin", name: "Mousselin", image: "Mousselin.jpg" },
-        { id: "nerys", name: "Nérys", image: "Nérys.jpg" },
-        { id: "noctilys", name: "Noctilys", image: "Noctilys.jpg" },
-        { id: "noveline", name: "Novéline", image: "Novéline.jpg" },
-        { id: "oubliane", name: "Oubliane", image: "Oubliane.jpg" },
-        { id: "teracine", name: "Téracine", image: "Téracine.jpg" },
-        { id: "umbrelis", name: "Umbrelis", image: "Umbrelis.jpg" },
-        { id: "verdalys", name: "Verdalys", image: "Verdalys.jpg" },
-        { id: "viscume", name: "Viscume", image: "Viscume.jpg" },
-        { id: "vrassine", name: "Vrassine", image: "Vrassine.jpg" }
-      ],
-      minerais: [
-        { id: "fer", name: "Minerai de Fer", image: "" },
-        { id: "or", name: "Minerai d'Or", image: "" },
-        { id: "mithril", name: "Mithril", image: "" }
-      ]
-    };
+    const DEFAULT_MAP_URL = './carte.jpg';
+    let currentMapUrl = localStorage.getItem('customMapBg') || DEFAULT_MAP_URL;
 
-    // --- CARTE LEAFLET ---
     let map = L.map('map', { crs: L.CRS.Simple, minZoom: -2, maxZoom: 3 });
     const bounds = [[0, 0], [1000, 1000]];
-    L.imageOverlay('carte.jpg', bounds).addTo(map);
+    let imageOverlay = L.imageOverlay(currentMapUrl, bounds).addTo(map);
     map.fitBounds(bounds);
 
-    let markersData = JSON.parse(localStorage.getItem('markersData')) || [];
-    let leafletMarkers = [];
-    let tempLatLng = null;
-
-    function renderMapMarkers() {
-      leafletMarkers.forEach(m => map.removeLayer(m));
-      leafletMarkers = [];
-      const listContainer = document.getElementById('marker-list-sidebar');
-      listContainer.innerHTML = '';
-
-      markersData.forEach((m, idx) => {
-        let iconHtml = `<div style="background:#151826; border:2px solid var(--accent); border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; overflow:hidden; box-shadow:0 2px 5px rgba(0,0,0,0.5);">`;
-        if(m.image) {
-          iconHtml += `<img src="${m.image}" style="width:100%; height:100%; object-fit:cover;">`;
-        } else {
-          iconHtml += `📍`;
-        }
-        iconHtml += `</div>`;
-
-        const customIcon = L.divIcon({
-          className: 'custom-map-icon',
-          html: iconHtml,
-          iconSize: [32, 32],
-          iconAnchor: [16, 16]
-        });
-
-        const marker = L.marker([m.lat, m.lng], { icon: customIcon }).addTo(map);
-        marker.bindPopup(`<b>${m.name}</b><br><span style="font-size:0.8em; text-transform:uppercase; color:var(--text-muted);">${m.category}</span>`);
-        leafletMarkers.push(marker);
-
-        listContainer.innerHTML += `
-          <div style="background:var(--card-bg); padding:6px 10px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; font-size:0.85em; border:1px solid var(--border);">
-            <div style="display:flex; align-items:center; gap:8px;">
-              ${m.image ? `<img src="${m.image}" style="width:20px; height:20px; border-radius:3px; object-fit:cover;">` : '📍'}
-              <span>${m.name}</span>
-            </div>
-            <button class="del-btn-icon" onclick="deleteMarker(${idx})">🗑️</button>
-          </div>`;
-      });
-
-      document.getElementById('stat-markers-count').innerText = markersData.length;
-      localStorage.setItem('markersData', JSON.stringify(markersData));
+    function changeMapBackground(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          currentMapUrl = e.target.result;
+          localStorage.setItem('customMapBg', currentMapUrl);
+          updateMapOverlay();
+        };
+        reader.readAsDataURL(file);
+      }
     }
 
+    function resetMapBackground() {
+      if (confirm("Réinitialiser l'image de la carte par défaut ?")) {
+        currentMapUrl = DEFAULT_MAP_URL;
+        localStorage.removeItem('customMapBg');
+        updateMapOverlay();
+      }
+    }
+
+    function updateMapOverlay() {
+      if (imageOverlay) map.removeLayer(imageOverlay);
+      imageOverlay = L.imageOverlay(currentMapUrl, bounds).addTo(map);
+    }
+
+    // =========================================================================
+    // LISTE EXACTE ET SYNCHRONISÉE DE TOUS TES FICHIERS SUR GITHUB
+    // =========================================================================
+    const cleanImageFilenames = [
+      "ameseve.png", "arcanelys.png", "astraline.png", "aurelys.png", 
+      "brasilys.png", "calytha.png", "champinelle.png", "chronea.png", 
+      "coquelia.png", "corroliane.png", "corvafleur.png", "dracoryne.png", 
+      "eryndel.png", "etheride.png", "florombre.png", "fogeline.png", 
+      "glacepine.png", "hiverine.png", "lothea.png", "lumignon.png", 
+      "luminelle.png", "minerai-cuivre.png", "minerai-etain.png", "minerai-fer.png", 
+      "minerai-jade.png", "minerai-mercurite.png", "minerai-mystique.png", 
+      "minerai-obsidienne.png", "minerai-or.png", "minerai-sel.png", 
+      "minerai-stellaire.png", "mousselin.png", "nerys.png", "noctilys.png", 
+      "noveline.png", "oubliane.png", "puriflor.png", "roselune.png", 
+      "sanguelis.png", "tempesia.png", "teracine.png", "umbrelis.png", 
+      "verdalys.png", "viscume.png", "vrassine.png"
+    ];
+
+    const DEFAULT_RESOURCE_PRESETS = cleanImageFilenames.map((filename, index) => {
+      const isMinerai = filename.includes("minerai");
+      // Formate un nom propre pour l'affichage (ex: "minerai-fer.png" -> "Minerai-fer")
+      const cleanName = filename.substring(0, filename.lastIndexOf('.'));
+      const formattedName = cleanName.charAt(0).toUpperCase() + cleanName.slice(1);
+      
+      return {
+        id: 101 + index,
+        name: formattedName,
+        category: isMinerai ? "Minerais" : "Plantes",
+        icon: isMinerai ? "⛏️" : "🌿",
+        customImg: "./" + filename, // Lien direct à la racine du dépôt
+        shape: "square",
+        color: isMinerai ? "#f59e0b" : "#6366f1",
+        desc: "Ressource issue de " + filename
+      };
+    });
+
+    let mapMarkers = JSON.parse(localStorage.getItem('mapMarkers')) || [];
+    let plantPresets = JSON.parse(localStorage.getItem('plantPresets')) || DEFAULT_RESOURCE_PRESETS;
+    let shopsData = JSON.parse(localStorage.getItem('shopsData')) || [];
+    let yearsData = JSON.parse(localStorage.getItem('yearsData')) || [];
+    let todosData = JSON.parse(localStorage.getItem('todosData')) || [];
+
+    function saveData() {
+      localStorage.setItem('mapMarkers', JSON.stringify(mapMarkers));
+      localStorage.setItem('plantPresets', JSON.stringify(plantPresets));
+      localStorage.setItem('shopsData', JSON.stringify(shopsData));
+      localStorage.setItem('yearsData', JSON.stringify(yearsData));
+      localStorage.setItem('todosData', JSON.stringify(todosData));
+    }
+
+    let leafletMarkersGroup = L.layerGroup().addTo(map);
+    let pendingLatLng = null;
+    let editingMarkerId = null;
+
     map.on('click', function(e) {
-      tempLatLng = e.latlng;
+      pendingLatLng = e.latlng;
       openMarkerModal();
     });
 
-    function activateAddMode() {
-      alert("Clique simplement n'importe où sur la carte pour placer un point !");
+    function startAddMarkerManual() {
+      pendingLatLng = { lat: 500, lng: 500 };
+      openMarkerModal();
     }
 
-    function openMarkerModal() {
-      document.getElementById('modal-category-select').value = "plantes";
-      updateResourceDropdown();
+    function updateModalPreview() {
+      const img = document.getElementById('m-custom-img').value.trim();
+      const icon = document.getElementById('m-icon').value || "📍";
+      if(img) {
+        document.getElementById('icon-preview').innerHTML = `<img src="./${img}" />`;
+      } else {
+        document.getElementById('icon-preview').innerText = icon;
+      }
+    }
+
+    function openMarkerModal(editId = null) {
+      editingMarkerId = editId;
+
+      const select = document.getElementById('m-preset-select');
+      select.innerHTML = '<option value="">-- Sélectionner une ressource --</option>';
+      plantPresets.forEach(p => {
+        select.innerHTML += `<option value="${p.id}">${p.icon || '🌿'} ${p.name}</option>`;
+      });
+
+      if(editId !== null) {
+        const m = mapMarkers.find(x => x.id === editId);
+        document.getElementById('marker-modal-title').innerText = "Éditer le point";
+        document.getElementById('m-name').value = m.name;
+        document.getElementById('m-category').value = m.category;
+        document.getElementById('m-custom-img').value = m.customImg ? m.customImg.replace('./', '') : "";
+        document.getElementById('m-icon').value = m.icon || "";
+        document.getElementById('m-shape').value = m.shape || "square";
+        document.getElementById('m-color').value = m.color || "#6366f1";
+        document.getElementById('m-desc').value = m.desc || "";
+      } else {
+        document.getElementById('marker-modal-title').innerText = "Ajouter un point sur la carte";
+        document.getElementById('m-name').value = "";
+        document.getElementById('m-category').value = "Plantes";
+        document.getElementById('m-custom-img').value = "";
+        document.getElementById('m-icon').value = "📍";
+        document.getElementById('m-desc').value = "";
+      }
+      updateModalPreview();
       document.getElementById('marker-modal').classList.add('active');
+    }
+
+    function applyPresetToMarkerForm(presetId) {
+      if(!presetId) return;
+      const p = plantPresets.find(x => x.id == presetId);
+      if(!p) return;
+      document.getElementById('m-name').value = p.name;
+      document.getElementById('m-category').value = p.category;
+      document.getElementById('m-custom-img').value = p.customImg ? p.customImg.replace('./', '') : "";
+      document.getElementById('m-icon').value = p.icon || "🌿";
+      document.getElementById('m-shape').value = p.shape || "square";
+      document.getElementById('m-color').value = p.color || "#38bdf8";
+      document.getElementById('m-desc').value = p.desc || "";
+      updateModalPreview();
     }
 
     function closeMarkerModal() {
       document.getElementById('marker-modal').classList.remove('active');
-      tempLatLng = null;
+      editingMarkerId = null;
     }
 
-    function updateResourceDropdown() {
-      const cat = document.getElementById('modal-category-select').value;
-      const select = document.getElementById('modal-resource-select');
-      select.innerHTML = '';
+    function saveMarkerFromModal() {
+      const name = document.getElementById('m-name').value || "Point";
+      const category = document.getElementById('m-category').value || "Plantes";
+      const rawImg = document.getElementById('m-custom-img').value.trim();
+      const customImg = rawImg ? (rawImg.startsWith('./') ? rawImg : './' + rawImg) : "";
+      const icon = document.getElementById('m-icon').value || "📍";
+      const shape = document.getElementById('m-shape').value;
+      const color = document.getElementById('m-color').value;
+      const desc = document.getElementById('m-desc').value;
 
-      if(gameResources[cat]) {
-        gameResources[cat].forEach(res => {
-          let opt = document.createElement('option');
-          opt.value = res.name;
-          opt.dataset.image = res.image;
-          opt.textContent = res.name;
-          select.appendChild(opt);
-        });
-      }
-      previewThumbnail();
-    }
-
-    function previewThumbnail() {
-      const select = document.getElementById('modal-resource-select');
-      const opt = select.options[select.selectedIndex];
-      const imgPreview = document.getElementById('modal-thumbnail-preview');
-      const textPreview = document.getElementById('modal-preview-text');
-
-      if(opt && opt.dataset.image) {
-        imgPreview.src = opt.dataset.image;
-        imgPreview.style.display = 'block';
-        textPreview.style.display = 'none';
+      if(editingMarkerId !== null) {
+        const idx = mapMarkers.findIndex(x => x.id === editingMarkerId);
+        if(idx !== -1) {
+          mapMarkers[idx] = { ...mapMarkers[idx], name, category, icon, shape, color, desc, customImg };
+        }
       } else {
-        imgPreview.style.display = 'none';
-        textPreview.style.display = 'block';
-        textPreview.innerText = opt ? opt.text : '';
+        const newMarker = {
+          id: Date.now(),
+          y: pendingLatLng ? pendingLatLng.lat : 500,
+          x: pendingLatLng ? pendingLatLng.lng : 500,
+          name, category, icon, shape, color, desc, customImg
+        };
+        mapMarkers.push(newMarker);
       }
+
+      saveData();
+      renderMapMarkers();
+      closeMarkerModal();
     }
 
-    function confirmAddMarker() {
-      if(!tempLatLng) return;
-      const cat = document.getElementById('modal-category-select').value;
-      const select = document.getElementById('modal-resource-select');
-      const opt = select.options[select.selectedIndex];
+    function deleteMarker(id) {
+      mapMarkers = mapMarkers.filter(m => m.id !== id);
+      saveData();
+      renderMapMarkers();
+    }
 
-      if(!opt) return alert("Sélectionne une ressource valide.");
+    function renderMapMarkers() {
+      leafletMarkersGroup.clearLayers();
+      const filterText = document.getElementById('map-search').value.toLowerCase();
+      const sidebarList = document.getElementById('marker-list-sidebar');
+      sidebarList.innerHTML = '';
 
-      markersData.push({
-        lat: tempLatLng.lat,
-        lng: tempLatLng.lng,
-        category: cat,
-        name: opt.text,
-        image: opt.dataset.image || ""
+      let count = 0;
+      mapMarkers.forEach(m => {
+        if(filterText && !m.name.toLowerCase().includes(filterText) && !m.category.toLowerCase().includes(filterText)) {
+          return;
+        }
+        count++;
+
+        const displayIcon = m.customImg 
+          ? `<img src="${m.customImg}" style="width:16px; height:16px; object-fit:cover; border-radius:2px;" />` 
+          : m.icon;
+
+        sidebarList.innerHTML += `
+          <div style="background:var(--card-bg); padding:6px 10px; border-radius:6px; border:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
+            <span onclick="focusOnMap(${m.y}, ${m.x})" style="cursor:pointer; display:flex; align-items:center; gap:6px;">${displayIcon} <strong>${m.name}</strong></span>
+            <button class="del-btn-icon" onclick="deleteMarker(${m.id})">🗑️</button>
+          </div>`;
+
+        const innerContent = m.customImg 
+          ? `<img src="${m.customImg}" style="width:100%; height:100%; object-fit:cover;" />` 
+          : m.icon;
+
+        const customIcon = L.divIcon({
+          className: `custom-map-marker ${m.shape}`,
+          html: `<div style="background:${m.color}; width:28px; height:28px; border-radius:${m.shape==='circle'?'50%':'6px'}; display:flex; align-items:center; justify-content:center; overflow:hidden;">${innerContent}</div>`,
+          iconSize: [28, 28],
+          iconAnchor: [14, 14]
+        });
+
+        const marker = L.marker([m.y, m.x], { icon: customIcon }).addTo(leafletMarkersGroup);
+        
+        const popupContent = `
+          <div>
+            <div class="marker-popup-cat">${m.category}</div>
+            <div class="marker-popup-title">${displayIcon} ${m.name}</div>
+            <div class="marker-popup-desc">${m.desc || 'Aucune description.'}</div>
+            <div style="display:flex; gap:6px; margin-top:8px;">
+              <button class="btn-xs" onclick="openMarkerModal(${m.id})">✏️ Éditer</button>
+              <button class="btn-xs" style="color:var(--danger);" onclick="deleteMarker(${m.id})">🗑️ Supprimer</button>
+            </div>
+          </div>`;
+
+        marker.bindPopup(popupContent);
       });
 
-      closeMarkerModal();
-      renderMapMarkers();
+      document.getElementById('stat-count').innerText = count;
     }
 
-    function deleteMarker(idx) {
-      markersData.splice(idx, 1);
-      renderMapMarkers();
+    function focusOnMap(y, x) { map.setView([y, x], 1); }
+
+    function renderPresets() {
+      const grid = document.getElementById('presets-grid');
+      grid.innerHTML = '';
+      plantPresets.forEach(p => {
+        const displayIcon = p.customImg ? `<img src="${p.customImg}" style="width:24px; height:24px; object-fit:cover; border-radius:4px;" />` : p.icon;
+        grid.innerHTML += `
+          <div class="preset-card">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div style="background:${p.color}; padding:6px; border-radius:6px; display:flex;">${displayIcon}</div>
+              <div>
+                <strong style="font-size:0.9em; color:#fff;">${p.name}</strong>
+                <div style="font-size:0.7em; color:var(--text-muted);">${p.category}</div>
+              </div>
+            </div>
+            <button class="del-btn-icon" onclick="deletePreset(${p.id})">🗑️</button>
+          </div>`;
+      });
     }
+
+    function openPresetModal() { document.getElementById('preset-modal').classList.add('active'); }
+    function closePresetModal() { document.getElementById('preset-modal').classList.remove('active'); }
+    function savePresetFromModal() {
+      const name = document.getElementById('p-name').value;
+      if(!name) return alert("Nom requis !");
+      const category = document.getElementById('p-category').value;
+      const rawImg = document.getElementById('p-custom-img').value.trim();
+      const customImg = rawImg ? (rawImg.startsWith('./') ? rawImg : './' + rawImg) : "";
+      const icon = document.getElementById('p-icon').value || "🌿";
+      const shape = document.getElementById('p-shape').value;
+      const color = document.getElementById('p-color').value;
+      const desc = document.getElementById('p-desc').value;
+
+      plantPresets.push({ id: Date.now(), name, category, customImg, icon, shape, color, desc });
+      saveData(); renderPresets(); closePresetModal();
+    }
+    function deletePreset(id) {
+      plantPresets = plantPresets.filter(p => p.id !== id);
+      saveData(); renderPresets();
+    }
+
+    let activeShopIdx = 0;
+    function renderShops() {
+      const menu = document.getElementById('shops-menu-list');
+      const grid = document.getElementById('shop-items-grid');
+      menu.innerHTML = ''; grid.innerHTML = '';
+      if(shopsData.length === 0) { document.getElementById('current-shop-title').innerText = "AUCUN MAGASIN"; return; }
+      if(activeShopIdx >= shopsData.length) activeShopIdx = 0;
+
+      shopsData.forEach((shop, idx) => {
+        menu.innerHTML += `
+          <div class="shop-menu-item ${idx === activeShopIdx ? 'active' : ''}" onclick="selectShop(${idx})">
+            <span>🧰 ${shop.name}</span>
+            <span style="font-size:0.75em; color:var(--text-muted);">${shop.items.length}</span>
+          </div>`;
+      });
+
+      const current = shopsData[activeShopIdx];
+      document.getElementById('current-shop-title').innerText = `🏪 ${current.name.toUpperCase()}`;
+      
+      current.items.forEach((item, iIdx) => {
+        grid.innerHTML += `
+          <div class="item-card">
+            <div class="item-card-title">${item.name}</div>
+            <div class="price-box-container">
+              <div class="price-box"><div class="price-label">Rachat</div><div class="price-val">${item.buy}</div></div>
+              <div class="price-box"><div class="price-label">Vente</div><div class="price-val">${item.sell}</div></div>
+            </div>
+            <div class="card-actions">
+              <button class="btn-xs" onclick="editItem(${iIdx})">✏️ Éditer</button>
+              <button class="btn-xs" style="color:var(--danger);" onclick="deleteItem(${iIdx})">🗑️ Supprimer</button>
+            </div>
+          </div>`;
+      });
+    }
+
+    function selectShop(idx) { activeShopIdx = idx; renderShops(); }
+    function addShop() { const name = prompt("Nom du magasin :"); if(name) { shopsData.push({ name, items: [] }); activeShopIdx = shopsData.length - 1; saveData(); renderShops(); } }
+    function renameCurrentShop() { if(!shopsData[activeShopIdx]) return; const name = prompt("Nouveau nom :", shopsData[activeShopIdx].name); if(name) { shopsData[activeShopIdx].name = name; saveData(); renderShops(); } }
+    function deleteCurrentShop() { if(!shopsData[activeShopIdx]) return; if(confirm("Supprimer ?")) { shopsData.splice(activeShopIdx, 1); activeShopIdx = 0; saveData(); renderShops(); } }
+    function addItemToCurrentShop() { if(!shopsData[activeShopIdx]) return alert("Crée d'abord un magasin."); const name = prompt("Nom de l'objet :"); const buy = prompt("Prix d'achat :") || "-"; const sell = prompt("Prix de vente :") || "-"; if(name) { shopsData[activeShopIdx].items.push({ name, buy, sell }); saveData(); renderShops(); } }
+    function editItem(iIdx) { const item = shopsData[activeShopIdx].items[iIdx]; const name = prompt("Nom :", item.name); const buy = prompt("Achat :", item.buy); const sell = prompt("Vente :", item.sell); if(name) { shopsData[activeShopIdx].items[iIdx] = { name, buy, sell }; saveData(); renderShops(); } }
+    function deleteItem(iIdx) { shopsData[activeShopIdx].items.splice(iIdx, 1); saveData(); renderShops(); }
+
+    let selectedYearIdx = null, selectedSubIdx = null;
+    function renderCourses() {
+      const yearsList = document.getElementById('years-list');
+      const coursesGrid = document.getElementById('courses-grid');
+      yearsList.innerHTML = ''; coursesGrid.innerHTML = '';
+
+      yearsData.forEach((y, yIdx) => {
+        let subjectsHtml = y.subjects.map((s, sIdx) => `
+          <div class="subject-item ${selectedYearIdx === yIdx && selectedSubIdx === sIdx ? 'active' : ''}">
+            <span onclick="selectSubject(${yIdx}, ${sIdx})">📙 ${s.name} (${s.courses.length})</span>
+            <button class="del-btn-icon" onclick="deleteSubject(${yIdx}, ${sIdx})">🗑️</button>
+          </div>`).join('');
+
+        yearsList.innerHTML += `
+          <div class="year-accordion open">
+            <div class="year-header">
+              <span onclick="this.parentElement.parentElement.classList.toggle('open')">📕 ${y.name}</span>
+              <div>
+                <button class="del-btn-icon" onclick="addSubject(${yIdx})">➕</button>
+                <button class="del-btn-icon" onclick="deleteYear(${yIdx})">🗑️</button>
+              </div>
+            </div>
+            <div class="year-body">
+              ${subjectsHtml}
+              <button style="width:100%; margin-top:6px; background:transparent; border:1px dashed var(--border); color:var(--text-muted); padding:4px; border-radius:4px; cursor:pointer;" onclick="addSubject(${yIdx})">+ Nouvelle matière</button>
+            </div>
+          </div>`;
+
+        y.subjects.forEach((s, sIdx) => {
+          s.courses.forEach((c, cIdx) => {
+            coursesGrid.innerHTML += `
+              <div class="course-card">
+                <div>
+                  <div style="font-size:0.7em; text-transform:uppercase; color:#818cf8; font-weight:bold;">${y.name} - ${s.name}</div>
+                  <div style="font-size:1em; font-weight:600; color:#fff; margin-bottom:6px;">📖 ${c.title}</div>
+                  <div style="font-size:0.8em; color:var(--text-muted); white-space:pre-wrap;">${c.desc}</div>
+                </div>
+                <div style="display:flex; justify-content:flex-end; margin-top:10px;">
+                  <button class="del-btn-icon" onclick="deleteCourse(${yIdx}, ${sIdx}, ${cIdx})">🗑️ Supprimer</button>
+                </div>
+              </div>`;
+          });
+        });
+      });
+    }
+
+    function addYear() { const name = prompt("Année :"); if(name) { yearsData.push({ name, subjects: [] }); saveData(); renderCourses(); } }
+    function deleteYear(yIdx) { if(confirm("Supprimer ?")) { yearsData.splice(yIdx, 1); saveData(); renderCourses(); } }
+    function addSubject(yIdx) { const name = prompt("Matière :"); if(name) { yearsData[yIdx].subjects.push({ name, courses: [] }); saveData(); renderCourses(); } }
+    function deleteSubject(yIdx, sIdx) { if(confirm("Supprimer ?")) { yearsData[yIdx].subjects.splice(sIdx, 1); saveData(); renderCourses(); } }
+    function selectSubject(yIdx, sIdx) { selectedYearIdx = yIdx; selectedSubIdx = sIdx; openModal(); }
+    function openModal() { document.getElementById('course-modal').classList.add('active'); }
+    function closeModal() { document.getElementById('course-modal').classList.remove('active'); }
+
+    function saveCourseFromModal() {
+      const title = document.getElementById('modal-course-title').value;
+      const desc = document.getElementById('modal-course-desc').value;
+      if(!title) return alert("Titre requis !");
+      if(selectedYearIdx === null || selectedSubIdx === null) {
+        if(yearsData.length > 0 && yearsData[0].subjects.length > 0) { selectedYearIdx = 0; selectedSubIdx = 0; } 
+        else { return alert("Crée d'abord une année et une matière !"); }
+      }
+      yearsData[selectedYearIdx].subjects[selectedSubIdx].courses.push({ title, desc });
+      saveData(); renderCourses(); closeModal();
+      document.getElementById('modal-course-title').value = '';
+      document.getElementById('modal-course-desc').value = '';
+    }
+
+    function deleteCourse(yIdx, sIdx, cIdx) { yearsData[yIdx].subjects[sIdx].courses.splice(cIdx, 1); saveData(); renderCourses(); }
+
+    function renderTodos() {
+      const grid = document.getElementById('todo-grid');
+      grid.innerHTML = '';
+      let total = 0, done = 0;
+
+      todosData.forEach((cat, cIdx) => {
+        let itemsHtml = cat.items.map((item, iIdx) => {
+          total++; if(item.done) done++;
+          return `
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; font-size:0.85em;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleTodo(${cIdx}, ${iIdx})">
+                <span style="${item.done ? 'text-decoration:line-through; color:var(--text-muted);' : ''}">${item.text}</span>
+              </div>
+              <button class="del-btn-icon" onclick="deleteTodoItem(${cIdx}, ${iIdx})">🗑️</button>
+            </div>`;
+        }).join('');
+
+        grid.innerHTML += `
+          <div class="todo-card">
+            <div style="font-size:0.9em; font-weight:bold; color:#38bdf8; text-transform:uppercase; margin-bottom:10px; display:flex; justify-content:space-between;">
+              <span>${cat.title}</span>
+              <button class="del-btn-icon" onclick="deleteTodoCategory(${cIdx})">🗑️</button>
+            </div>
+            <div>${itemsHtml}</div>
+            <button style="margin-top:8px; background:transparent; border:none; color:var(--accent); cursor:pointer; font-size:0.8em;" onclick="addTodoItem(${cIdx})">+ Ajouter</button>
+          </div>`;
+      });
+
+      const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+      document.getElementById('progress-text').innerText = `${done} / ${total} (${pct}%)`;
+      document.getElementById('progress-fill').style.width = `${pct}%`;
+    }
+
+    function toggleTodo(cIdx, iIdx) { todosData[cIdx].items[iIdx].done = !todosData[cIdx].items[iIdx].done; saveData(); renderTodos(); }
+    function addTodoCategory() { const title = prompt("Catégorie :"); if(title) { todosData.push({ title: title.toUpperCase(), items: [] }); saveData(); renderTodos(); } }
+    function deleteTodoCategory(cIdx) { if(confirm("Supprimer ?")) { todosData.splice(cIdx, 1); saveData(); renderTodos(); } }
+    function addTodoItem(cIdx) { const text = prompt("Tâche :"); if(text) { todosData[cIdx].items.push({ text, done: false }); saveData(); renderTodos(); } }
+    function deleteTodoItem(cIdx, iIdx) { todosData[cIdx].items.splice(cIdx, 1); saveData(); renderTodos(); }
 
     function switchView(viewId, btn) {
       document.querySelectorAll('.view-content').forEach(e => e.classList.remove('active'));
@@ -432,7 +873,12 @@
     }
 
     window.onload = function() {
+      checkLockStatus();
       renderMapMarkers();
+      renderPresets();
+      renderShops();
+      renderCourses();
+      renderTodos();
     };
   </script>
 </body>
