@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carte du Royaume & Grimoire</title>
+  <title>Carte du Royaume & Grimoire Sécurisé</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
     :root {
@@ -113,9 +113,25 @@
     .modal-box select, .modal-box input { width: 100%; background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; padding: 8px; color: #fff; outline: none; }
     
     .search-input { width: 100%; background: var(--sidebar-left); border: 1px solid var(--border); padding: 8px 12px; border-radius: 6px; color: #fff; font-size: 0.85em; outline: none; }
+    
+    /* ÉCRAN DE VERROUILLAGE SÉCURISÉ */
+    #lock-screen {
+      position: fixed; inset: 0; background: var(--bg-dark); z-index: 9999;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px;
+    }
   </style>
 </head>
 <body>
+
+  <!-- ÉCRAN DE SÉCURITÉ / MOT DE PASSE -->
+  <div id="lock-screen">
+    <div style="background:var(--panel-bg); border:1px solid var(--border); padding:30px; border-radius:12px; text-align:center; width:360px; display:flex; flex-direction:column; gap:15px;">
+      <h2 style="color:#fff;">🔒 Accès Restreint</h2>
+      <p style="font-size:0.85em; color:var(--text-muted);">Entre le mot de passe administrateur pour accéder à la carte et au grimoire.</p>
+      <input type="password" id="password-input" placeholder="Mot de passe..." style="width:100%; background:var(--card-bg); border:1px solid var(--border); padding:10px; border-radius:6px; color:#fff; text-align:center; outline:none;" />
+      <button class="btn-sm" style="justify-content:center; padding:10px;" onclick="checkPassword()">Déverrouiller</button>
+    </div>
+  </div>
 
   <!-- NAVIGATION GAUCHE -->
   <nav class="nav-sidebar">
@@ -231,6 +247,30 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
+    // --- MOT DE PASSE (Modifiable ici) ---
+    const ADMIN_PASSWORD = "motdepassebotaniste"; // Change le mot de passe ici si tu veux
+
+    function checkPassword() {
+      const input = document.getElementById('password-input').value;
+      if (input === ADMIN_PASSWORD) {
+        document.getElementById('lock-screen').style.display = 'none';
+        sessionStorage.setItem('auth_granted', 'true');
+        setTimeout(() => map.invalidateSize(), 200);
+      } else {
+        alert("Mot de passe incorrect !");
+      }
+    }
+
+    // Permettre de valider avec la touche Entrée
+    document.getElementById('password-input').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') checkPassword();
+    });
+
+    // Si déjà connecté dans la session du navigateur
+    if (sessionStorage.getItem('auth_granted') === 'true') {
+      document.getElementById('lock-screen').style.display = 'none';
+    }
+
     // --- CATALOGUE DES 35 PLANTES ET MINERAIS ---
     const gameResources = {
       plantes: [
@@ -259,7 +299,6 @@
         { id: "verdalys", name: "Verdalys", image: "Verdalys.jpg" },
         { id: "viscume", name: "Viscume", image: "Viscume.jpg" },
         { id: "vrassine", name: "Vrassine", image: "Vrassine.jpg" }
-        // (Tu disposes des 10 autres plantes associées si besoin dans les listes précédentes)
       ],
       minerais: [
         { id: "fer", name: "Minerai de Fer", image: "" },
@@ -271,7 +310,8 @@
     // --- CARTE LEAFLET ---
     let map = L.map('map', { crs: L.CRS.Simple, minZoom: -2, maxZoom: 3 });
     const bounds = [[0, 0], [1000, 1000]];
-    L.imageOverlay('https://carte-magique.onrender.com/carte.png', bounds).addTo(map);
+    // Utilisation de carte.jpg comme demandé
+    L.imageOverlay('carte.jpg', bounds).addTo(map);
     map.fitBounds(bounds);
 
     let markersData = JSON.parse(localStorage.getItem('markersData')) || [];
@@ -285,7 +325,6 @@
       listContainer.innerHTML = '';
 
       markersData.forEach((m, idx) => {
-        // Icône personnalisée avec miniature si disponible
         let iconHtml = `<div style="background:#151826; border:2px solid var(--accent); border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; overflow:hidden; box-shadow:0 2px 5px rgba(0,0,0,0.5);">`;
         if(m.image) {
           iconHtml += `<img src="${m.image}" style="width:100%; height:100%; object-fit:cover;">`;
@@ -305,7 +344,6 @@
         marker.bindPopup(`<b>${m.name}</b><br><span style="font-size:0.8em; text-transform:uppercase; color:var(--text-muted);">${m.category}</span>`);
         leafletMarkers.push(marker);
 
-        // Sidebar list
         listContainer.innerHTML += `
           <div style="background:var(--card-bg); padding:6px 10px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; font-size:0.85em; border:1px solid var(--border);">
             <div style="display:flex; align-items:center; gap:8px;">
@@ -320,7 +358,6 @@
       localStorage.setItem('markersData', JSON.stringify(markersData));
     }
 
-    // Gestion clic sur la carte pour ajouter un point
     map.on('click', function(e) {
       tempLatLng = e.latlng;
       openMarkerModal();
@@ -400,18 +437,16 @@
       renderMapMarkers();
     }
 
-    // --- LOCALSTORAGE DATA (Shops, Courses, Todos) ---
     let shopsData = JSON.parse(localStorage.getItem('shopsData')) || [];
     let yearsData = JSON.parse(localStorage.getItem('yearsData')) || [];
     let todosData = JSON.parse(localStorage.getItem('todosData')) || [];
 
-    // --- FONCTIONS MARCHANDS, COURS, TODO (Raccourcis d'affichage) ---
     function renderShops() {
       const grid = document.getElementById('shop-items-grid');
       if(!grid) return;
       grid.innerHTML = '';
       if(shopsData.length > 0 && shopsData[0].items) {
-        shopsData[0].items.forEach(item => {
+        shopsData.items.forEach(item => {
           grid.innerHTML += `<div class="item-card"><div class="item-card-title">${item.name}</div></div>`;
         });
       }
