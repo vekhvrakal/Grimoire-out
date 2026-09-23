@@ -25,7 +25,6 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
     body { background: var(--bg-dark); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
 
-    /* ÉCRAN DE VERROUILLAGE */
     #lock-screen {
       position: fixed; inset: 0; background: var(--bg-dark); z-index: 9999;
       display: flex; justify-content: center; align-items: center; flex-direction: column;
@@ -45,7 +44,6 @@
       border-radius: 6px; font-weight: bold; cursor: pointer; transition: opacity 0.2s;
     }
 
-    /* MENU VERTICAL GAUCHE */
     .nav-sidebar {
       width: 60px; background: var(--sidebar-left); border-right: 1px solid var(--border);
       display: flex; flex-direction: column; align-items: center; padding: 15px 0; gap: 15px; z-index: 100;
@@ -73,9 +71,8 @@
     .view-content { display: none; width: 100%; height: calc(100vh - 48px); }
     .view-content.active { display: flex; }
 
-    /* CARTE */
     .map-sidebar { width: 280px; background: var(--panel-bg); border-right: 1px solid var(--border); padding: 15px; display: flex; flex-direction: column; gap: 15px; overflow-y: auto; font-size: 0.85em; }
-    .section-title { font-size: 0.75em; font-weight: bold; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+    .section-title { font-size: 0.75em; font-weight: bold; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
     #map-wrapper { flex: 1; position: relative; }
     #map { width: 100%; height: 100%; background: #000; cursor: crosshair; }
 
@@ -94,19 +91,17 @@
     .marker-popup-cat { font-size: 0.75em; color: var(--gold); text-transform: uppercase; font-weight: 600; }
     .marker-popup-desc { font-size: 0.85em; color: var(--text-muted); margin: 8px 0; white-space: pre-wrap; }
 
-    /* MARCHANDS */
     .shops-sidebar { width: 240px; background: var(--panel-bg); border-right: 1px solid var(--border); padding: 15px; display: flex; flex-direction: column; gap: 8px; }
     .shop-menu-item { padding: 10px 12px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 0.9em; }
     .shop-menu-item.active { border-color: var(--accent); background: var(--card-inner); }
     .items-grid { flex: 1; padding: 20px; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; align-content: start; }
-    .item-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px; position: relative; }
+    .item-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
     .item-card-title { font-weight: bold; font-size: 0.95em; color: #fff; }
     .price-box-container { display: flex; gap: 6px; }
     .price-box { flex: 1; background: var(--card-inner); border: 1px solid var(--border); border-radius: 6px; padding: 6px; text-align: center; }
     .price-label { font-size: 0.65em; color: var(--text-muted); text-transform: uppercase; }
     .price-val { font-weight: bold; font-size: 1.1em; color: var(--gold); }
 
-    /* COURS & NOTES */
     .courses-layout { display: flex; width: 100%; height: 100%; }
     .courses-sidebar { width: 300px; background: var(--panel-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 16px; gap: 12px; overflow-y: auto; }
     .year-accordion { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 8px; }
@@ -120,7 +115,6 @@
     .course-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px; position: relative; display: flex; flex-direction: column; justify-content: space-between; }
     .del-btn-icon { background: transparent; border: none; color: var(--danger); cursor: pointer; font-size: 0.85em; opacity: 0.7; }
 
-    /* TO-DO */
     .todo-layout { width: 100%; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; max-width: 1100px; margin: 0 auto; }
     .progress-card { background: var(--panel-bg); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
     .progress-bar-bg { width: 100%; height: 10px; background: var(--bg-dark); border-radius: 5px; overflow: hidden; margin-top: 10px; border: 1px solid var(--border); }
@@ -128,12 +122,10 @@
     .todo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
     .todo-card { background: var(--panel-bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
 
-    /* RESSOURCES / MODÈLES */
     .presets-layout { padding: 24px; width: 100%; max-width: 1000px; margin: 0 auto; overflow-y: auto; }
     .presets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-top: 16px; }
     .preset-card { background: var(--panel-bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 
-    /* MODALES */
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 2000; justify-content: center; align-items: center; }
     .modal-overlay.active { display: flex; }
     .modal-box { background: var(--panel-bg); border: 1px solid var(--border); padding: 20px; border-radius: 10px; width: 440px; max-width: 92%; display: flex; flex-direction: column; gap: 12px; }
@@ -149,18 +141,16 @@
 </head>
 <body>
 
-  <!-- ÉCRAN DE VERROUILLAGE -->
   <div id="lock-screen">
     <div class="lock-card">
-      <h2 id="lock-title">🔒 Grimoire Vérouillé</h2>
-      <p id="lock-subtitle" style="font-size:0.85em; color:var(--text-muted);">Entre ton mot de passe pour accéder à tes cartes et fiches.</p>
+      <h2>🔒 Grimoire Vérouillé</h2>
+      <p style="font-size:0.85em; color:var(--text-muted);">Entre ton mot de passe pour accéder à tes cartes et fiches.</p>
       <input type="password" id="lock-input" placeholder="Mot de passe..." onkeypress="if(event.key==='Enter') verifyPassword()">
-      <button onclick="verifyPassword()" id="lock-btn">Déverrouiller</button>
+      <button onclick="verifyPassword()">Déverrouiller</button>
       <p id="lock-error" style="color:var(--danger); font-size:0.8em; display:none;">Mot de passe incorrect !</p>
     </div>
   </div>
 
-  <!-- NAVIGATION GAUCHE -->
   <nav class="nav-sidebar">
     <button class="nav-btn active" onclick="switchView('map', this)"><span>🗺️</span>CARTE</button>
     <button class="nav-btn" onclick="switchView('presets', this)"><span>🌿</span>PLANTES</button>
@@ -172,7 +162,6 @@
 
   <div class="app-container">
     
-    <!-- 1. CARTE -->
     <div id="view-map" class="view-content active">
       <div class="map-sidebar">
         <div>
@@ -210,13 +199,12 @@
       <div id="map-wrapper"><div id="map"></div></div>
     </div>
 
-    <!-- 2. CATALOGUE DES PLANTES & RESSOURCES -->
     <div id="view-presets" class="view-content">
       <div class="presets-layout">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <div>
             <h2>🌿 Catalogue des Ressources</h2>
-            <p style="color:var(--text-muted); font-size:0.85em; margin-top:4px;">Généré automatiquement depuis tes fichiers sans espaces ni accents.</p>
+            <p style="color:var(--text-muted); font-size:0.85em; margin-top:4px;">Généré automatiquement depuis tes fichiers.</p>
           </div>
           <button class="btn-sm" onclick="openPresetModal()">+ Ajouter une ressource</button>
         </div>
@@ -224,7 +212,6 @@
       </div>
     </div>
 
-    <!-- 3. MARCHANDS -->
     <div id="view-shops" class="view-content">
       <div class="shops-sidebar">
         <input type="text" class="search-input" placeholder="Rechercher...">
@@ -244,7 +231,6 @@
       </div>
     </div>
 
-    <!-- 4. COURS -->
     <div id="view-courses" class="view-content">
       <div class="courses-layout">
         <div class="courses-sidebar">
@@ -259,7 +245,6 @@
       </div>
     </div>
 
-    <!-- 5. TO-DO -->
     <div id="view-todo" class="view-content">
       <div class="todo-layout">
         <div class="progress-card">
@@ -279,7 +264,6 @@
 
   </div>
 
-  <!-- MODALE : MARQUEUR -->
   <div class="modal-overlay" id="marker-modal">
     <div class="modal-box">
       <h3 id="marker-modal-title">Ajouter un point sur la carte</h3>
@@ -306,8 +290,8 @@
 
       <div style="display:flex; gap:10px; align-items:flex-end;">
         <label style="flex:1;">
-          Fichier image exact (ex: ameseve.png)
-          <input type="text" id="m-custom-img" placeholder="eseve.png" oninput="updateModalPreview()">
+          Fichier image exact
+          <input type="text" id="m-custom-img" placeholder="Ameseve.png" oninput="updateModalPreview()">
         </label>
         <label style="width:90px;">
           Ou Émoji
@@ -336,7 +320,6 @@
     </div>
   </div>
 
-  <!-- MODALE : PRESET -->
   <div class="modal-overlay" id="preset-modal">
     <div class="modal-box">
       <h3>Ajouter un modèle de ressource</h3>
@@ -348,7 +331,7 @@
       </label>
       <div style="display:flex; gap:10px;">
         <label style="flex:1;">Nom du fichier image
-          <input type="text" id="p-custom-img" placeholder="fichier.png">
+          <input type="text" id="p-custom-img" placeholder="Fichier.png">
         </label>
         <label style="width:90px;">Émoji
           <input type="text" id="p-icon" value="🌿">
@@ -372,7 +355,6 @@
     </div>
   </div>
 
-  <!-- MODALE : COURS -->
   <div class="modal-overlay" id="course-modal">
     <div class="modal-box">
       <h3>Ajouter une fiche de cours</h3>
@@ -387,23 +369,11 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    async function hashPassword(password) {
-      const msgBuffer = new TextEncoder().encode(password);
-      const hashBuffer = await crypto.subtle ? crypto.subtle.digest('SHA-256', msgBuffer) : null;
-      if (!hashBuffer) return password;
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    }
+    const CORRECT_PASSWORD = "RoyaumeSecret!";
 
-    // Mot de passe forcé en dur : RoyaumeSecret! (hash SHA-256 pré-calculé)
-    const FORCED_PASSWORD_HASH = "8f38bf3b860b73c24d17c91d9b9220377a06411f56a31c5553e1987d6cf081b2";
-
-    async function verifyPassword() {
+    function verifyPassword() {
       const input = document.getElementById('lock-input').value;
-      if(!input) return;
-      const hashedInput = await hashPassword(input);
-
-      if (hashedInput === FORCED_PASSWORD_HASH) {
+      if (input === CORRECT_PASSWORD) {
         document.getElementById('lock-screen').style.display = 'none';
         document.getElementById('lock-error').style.display = 'none';
         document.getElementById('lock-input').value = '';
@@ -412,9 +382,8 @@
       }
     }
 
-    function lockApp() { document.getElementById('lock-screen').style.display = 'flex'; }
-    function checkLockStatus() {
-      // Toujours actif avec le mot de passe fixe
+    function lockApp() { 
+      document.getElementById('lock-screen').style.display = 'flex'; 
     }
 
     const DEFAULT_MAP_URL = './carte.jpg';
@@ -451,29 +420,29 @@
       imageOverlay = L.imageOverlay(currentMapUrl, bounds).addTo(map);
     }
 
-    const cleanImageFilenames = [
-      "ameseve.png", "arcanelys.png", "astraline.png", "aurelys.png", 
-      "brasilys.png", "calytha.png", "champinelle.png", "chronea.png", 
-      "coquelia.png", "corroliane.png", "corvafleur.png", "dracoryne.png", 
-      "eryndel.png", "etheride.png", "florombre.png", "fogeline.png", 
-      "glacepine.png", "hiverine.png", "lothea.png", "lumignon.png", 
-      "luminelle.png", "minerai-cuivre.png", "minerai-etain.png", "minerai-fer.png", 
-      "minerai-jade.png", "minerai-mercurite.png", "minerai-mystique.png", 
-      "minerai-obsidienne.png", "minerai-or.png", "minerai-sel.png", 
-      "minerai-stellaire.png", "mousselin.png", "nerys.png", "noctilys.png", 
-      "noveline.png", "oubliane.png", "puriflor.png", "roselune.png", 
-      "sanguelis.png", "tempesia.png", "teracine.png", "umbrelis.png", 
-      "verdalys.png", "viscume.png", "vrassine.png"
+    // LISTE CORRIGÉE AVEC LES EXACTES MAJUSCULES DE TES CAPTURES GITHUB
+    const exactImageFilenames = [
+      "Ameseve.png", "Arcanelys.png", "Astraline.png", "Aurelys.png", 
+      "Brasilys.png", "Calytha.png", "Champinelle.png", "Chronea.png", 
+      "Coquelia.png", "Corroliane.png", "Corvafleur.png", "Dracoryne.png", 
+      "Eryndel.png", "Etheride.png", "Florombre.png", "Fogeline.png", 
+      "Glacepine.png", "Hiverine.png", "Lothea.png", "Lumignon.png", 
+      "Luminelle.png", "Minerai-Cuivre.png", "Minerai-etain.png", "Minerai-Fer.png", 
+      "Minerai-Jade.png", "Minerai-Mercurite.png", "Minerai-Mystique.png", 
+      "Minerai-d'Obsidienne.png", "Minerai-d'Or.png", "Minerai-Sel.png", 
+      "Minerai-Stellaire.png", "Mousselin.png", "Nerys.png", "Noctilys.png", 
+      "Noveline.png", "Oubliane.png", "Puriflor.png", "Roselune.png", 
+      "Sanguelis.png", "Tempesia.png", "Teracine.png", "Umbrelis.png", 
+      "Verdalys.png", "Viscume.png", "Vrassine.png"
     ];
 
-    const DEFAULT_RESOURCE_PRESETS = cleanImageFilenames.map((filename, index) => {
-      const isMinerai = filename.includes("minerai");
+    const DEFAULT_RESOURCE_PRESETS = exactImageFilenames.map((filename, index) => {
+      const isMinerai = filename.toLowerCase().includes("minerai");
       const cleanName = filename.substring(0, filename.lastIndexOf('.'));
-      const formattedName = cleanName.charAt(0).toUpperCase() + cleanName.slice(1);
       
       return {
         id: 101 + index,
-        name: formattedName,
+        name: cleanName.replace(/-/g, ' '),
         category: isMinerai ? "Minerais" : "Plantes",
         icon: isMinerai ? "⛏️" : "🌿",
         customImg: "./" + filename,
@@ -515,7 +484,7 @@
       const img = document.getElementById('m-custom-img').value.trim();
       const icon = document.getElementById('m-icon').value || "📍";
       if(img) {
-        document.getElementById('icon-preview').innerHTML = `<img src="./${img}" />`;
+        document.getElementById('icon-preview').innerHTML = `<img src="./${img}" onerror="this.onerror=null;this.parentNode.innerText='📍';" />`;
       } else {
         document.getElementById('icon-preview').innerText = icon;
       }
@@ -621,7 +590,7 @@
         count++;
 
         const displayIcon = m.customImg 
-          ? `<img src="${m.customImg}" style="width:16px; height:16px; object-fit:cover; border-radius:2px;" />` 
+          ? `<img src="${m.customImg}" style="width:16px; height:16px; object-fit:cover; border-radius:2px;" onerror="this.onerror=null;this.parentNode.innerHTML='📍';" />` 
           : m.icon;
 
         sidebarList.innerHTML += `
@@ -631,7 +600,7 @@
           </div>`;
 
         const innerContent = m.customImg 
-          ? `<img src="${m.customImg}" style="width:100%; height:100%; object-fit:cover;" />` 
+          ? `<img src="${m.customImg}" style="width:100%; height:100%; object-fit:cover;" onerror="this.onerror=null;this.parentNode.innerHTML='📍';" />` 
           : m.icon;
 
         const customIcon = L.divIcon({
@@ -666,7 +635,7 @@
       const grid = document.getElementById('presets-grid');
       grid.innerHTML = '';
       plantPresets.forEach(p => {
-        const displayIcon = p.customImg ? `<img src="${p.customImg}" style="width:24px; height:24px; object-fit:cover; border-radius:4px;" />` : p.icon;
+        const displayIcon = p.customImg ? `<img src="${p.customImg}" style="width:24px; height:24px; object-fit:cover; border-radius:4px;" onerror="this.onerror=null;this.parentNode.innerHTML='${p.icon}';" />` : p.icon;
         grid.innerHTML += `
           <div class="preset-card">
             <div style="display:flex; align-items:center; gap:8px;">
@@ -794,7 +763,7 @@
     function addYear() { const name = prompt("Année :"); if(name) { yearsData.push({ name, subjects: [] }); saveData(); renderCourses(); } }
     function deleteYear(yIdx) { if(confirm("Supprimer ?")) { yearsData.splice(yIdx, 1); saveData(); renderCourses(); } }
     function addSubject(yIdx) { const name = prompt("Matière :"); if(name) { yearsData[yIdx].subjects.push({ name, courses: [] }); saveData(); renderCourses(); } }
-    function deleteSubject(yIdx, sIdx) { if(confirm("Supprimer ?")) { yearsData[yIdx].subjects.splice(sIdx, 1); saveData(); renderCourses(); } }
+    function deleteSubject(yIdx, sIdx) { if(confirm("Supprimer ?")) { yearsData[yIdx].subjects.splice(yIdx, 1); saveData(); renderCourses(); } }
     function selectSubject(yIdx, sIdx) { selectedYearIdx = yIdx; selectedSubIdx = sIdx; openModal(); }
     function openModal() { document.getElementById('course-modal').classList.add('active'); }
     function closeModal() { document.getElementById('course-modal').classList.remove('active'); }
@@ -853,7 +822,7 @@
     function addTodoCategory() { const title = prompt("Catégorie :"); if(title) { todosData.push({ title: title.toUpperCase(), items: [] }); saveData(); renderTodos(); } }
     function deleteTodoCategory(cIdx) { if(confirm("Supprimer ?")) { todosData.splice(cIdx, 1); saveData(); renderTodos(); } }
     function addTodoItem(cIdx) { const text = prompt("Tâche :"); if(text) { todosData[cIdx].items.push({ text, done: false }); saveData(); renderTodos(); } }
-    function deleteTodoItem(cIdx, iIdx) { todosData[cIdx].items.splice(cIdx, 1); saveData(); renderTodos(); }
+    function deleteTodoItem(cIdx, iIdx) { todosData[cIdx].items.splice(iIdx, 1); saveData(); renderTodos(); }
 
     function switchView(viewId, btn) {
       document.querySelectorAll('.view-content').forEach(e => e.classList.remove('active'));
@@ -864,7 +833,6 @@
     }
 
     window.onload = function() {
-      checkLockStatus();
       renderMapMarkers();
       renderPresets();
       renderShops();
