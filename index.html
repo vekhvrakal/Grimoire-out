@@ -82,17 +82,36 @@
     .progress-bar-bg { width: 100%; height: 10px; background: var(--bg-dark); border-radius: 5px; overflow: hidden; margin-top: 10px; border: 1px solid var(--border); }
     .progress-bar-fill { height: 100%; background: var(--accent-gradient); width: 0%; transition: width 0.3s; }
 
-    /* MODALE AJOUT DE POINT */
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; justify-content: center; align-items: center; }
+    /* MODALE AJOUT DE POINT (Corrigé au premier plan) */
+    .modal-overlay { 
+      display: none; 
+      position: fixed; 
+      inset: 0; 
+      background: rgba(0,0,0,0.8); 
+      z-index: 99999; 
+      justify-content: center; 
+      align-items: center; 
+    }
     .modal-overlay.active { display: flex; }
-    .modal-box { background: var(--panel-bg); border: 1px solid var(--border); padding: 20px; border-radius: 10px; width: 420px; max-width: 90%; display: flex; flex-direction: column; gap: 12px; }
-    .modal-box h3 { color: #fff; }
+    .modal-box { 
+      background: var(--panel-bg); 
+      border: 1px solid var(--border); 
+      padding: 20px; 
+      border-radius: 10px; 
+      width: 420px; 
+      max-width: 90%; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 12px; 
+      position: relative;
+      z-index: 100000;
+    }
     .modal-box select, .modal-box input { width: 100%; background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; padding: 8px; color: #fff; outline: none; }
     .search-input { width: 100%; background: var(--sidebar-left); border: 1px solid var(--border); padding: 8px 12px; border-radius: 6px; color: #fff; font-size: 0.85em; outline: none; }
 
     /* ÉCRAN DE SÉCURITÉ */
     #lock-screen {
-      position: fixed; inset: 0; background: var(--bg-dark); z-index: 9999;
+      position: fixed; inset: 0; background: var(--bg-dark); z-index: 999999;
       display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px;
     }
   </style>
@@ -218,7 +237,6 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    // --- MOT DE PASSE REQUIS POUR TOUT LE MONDE ---
     const ADMIN_PASSWORD = "RoyaumeSecret!";
 
     function checkPassword() {
