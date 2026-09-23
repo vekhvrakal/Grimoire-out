@@ -395,16 +395,15 @@
       return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
+    // Mot de passe forcé en dur : RoyaumeSecret! (hash SHA-256 pré-calculé)
+    const FORCED_PASSWORD_HASH = "8f38bf3b860b73c24d17c91d9b9220377a06411f56a31c5553e1987d6cf081b2";
+
     async function verifyPassword() {
       const input = document.getElementById('lock-input').value;
       if(!input) return;
       const hashedInput = await hashPassword(input);
-      const savedHash = localStorage.getItem('appPasswordHash');
 
-      if (!savedHash) {
-        localStorage.setItem('appPasswordHash', hashedInput);
-        document.getElementById('lock-screen').style.display = 'none';
-      } else if (savedHash === hashedInput) {
+      if (hashedInput === FORCED_PASSWORD_HASH) {
         document.getElementById('lock-screen').style.display = 'none';
         document.getElementById('lock-error').style.display = 'none';
         document.getElementById('lock-input').value = '';
@@ -415,11 +414,7 @@
 
     function lockApp() { document.getElementById('lock-screen').style.display = 'flex'; }
     function checkLockStatus() {
-      if (!localStorage.getItem('appPasswordHash')) {
-        document.getElementById('lock-title').innerText = "🔑 Définir ton Mot de Passe";
-        document.getElementById('lock-subtitle').innerText = "Choisis un mot de passe pour protéger ton accès.";
-        document.getElementById('lock-btn').innerText = "Créer le mot de passe";
-      }
+      // Toujours actif avec le mot de passe fixe
     }
 
     const DEFAULT_MAP_URL = './carte.jpg';
@@ -456,9 +451,6 @@
       imageOverlay = L.imageOverlay(currentMapUrl, bounds).addTo(map);
     }
 
-    // =========================================================================
-    // LISTE EXACTE ET SYNCHRONISÉE DE TOUS TES FICHIERS SUR GITHUB
-    // =========================================================================
     const cleanImageFilenames = [
       "ameseve.png", "arcanelys.png", "astraline.png", "aurelys.png", 
       "brasilys.png", "calytha.png", "champinelle.png", "chronea.png", 
@@ -476,7 +468,6 @@
 
     const DEFAULT_RESOURCE_PRESETS = cleanImageFilenames.map((filename, index) => {
       const isMinerai = filename.includes("minerai");
-      // Formate un nom propre pour l'affichage (ex: "minerai-fer.png" -> "Minerai-fer")
       const cleanName = filename.substring(0, filename.lastIndexOf('.'));
       const formattedName = cleanName.charAt(0).toUpperCase() + cleanName.slice(1);
       
@@ -485,7 +476,7 @@
         name: formattedName,
         category: isMinerai ? "Minerais" : "Plantes",
         icon: isMinerai ? "⛏️" : "🌿",
-        customImg: "./" + filename, // Lien direct à la racine du dépôt
+        customImg: "./" + filename,
         shape: "square",
         color: isMinerai ? "#f59e0b" : "#6366f1",
         desc: "Ressource issue de " + filename
