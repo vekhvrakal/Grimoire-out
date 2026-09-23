@@ -44,7 +44,6 @@
       background: var(--accent-gradient); color: #fff; border: none; padding: 10px;
       border-radius: 6px; font-weight: bold; cursor: pointer; transition: opacity 0.2s;
     }
-    .lock-card button:hover { opacity: 0.9; }
 
     /* MENU VERTICAL GAUCHE */
     .nav-sidebar {
@@ -54,7 +53,7 @@
     .nav-btn {
       width: 44px; height: 44px; border-radius: 10px; background: transparent; border: none;
       color: var(--text-muted); cursor: pointer; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; font-size: 0.65em; gap: 3px; font-weight: 600;
+      align-items: center; justify-content: center; font-size: 0.6em; gap: 3px; font-weight: 600;
     }
     .nav-btn span { font-size: 1.3em; }
     .nav-btn:hover, .nav-btn.active { background: var(--card-bg); color: #fff; }
@@ -89,7 +88,6 @@
     .custom-map-marker:hover { transform: scale(1.2); z-index: 1000 !important; }
     .custom-map-marker.circle { border-radius: 50%; }
     .custom-map-marker.square { border-radius: 6px; }
-    .custom-map-marker img { width: 100%; height: 100%; object-fit: cover; }
 
     /* POPUP LEAFLET */
     .leaflet-popup-content-wrapper { background: var(--panel-bg) !important; color: var(--text) !important; border: 1px solid var(--border); border-radius: 8px; }
@@ -109,27 +107,20 @@
     .price-box { flex: 1; background: var(--card-inner); border: 1px solid var(--border); border-radius: 6px; padding: 6px; text-align: center; }
     .price-label { font-size: 0.65em; color: var(--text-muted); text-transform: uppercase; }
     .price-val { font-weight: bold; font-size: 1.1em; color: var(--gold); }
-    .card-actions { display: flex; gap: 4px; margin-top: 4px; }
-    .btn-xs { flex: 1; padding: 4px; font-size: 0.75em; background: var(--card-inner); border: 1px solid var(--border); color: var(--text); border-radius: 4px; cursor: pointer; text-align: center; }
 
     /* COURS & NOTES */
     .courses-layout { display: flex; width: 100%; height: 100%; }
     .courses-sidebar { width: 300px; background: var(--panel-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 16px; gap: 12px; overflow-y: auto; }
     .year-accordion { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 8px; }
     .year-header { padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600; font-size: 0.9em; }
-    .year-header:hover { background: var(--card-inner); }
     .year-body { display: none; padding: 8px; background: var(--panel-bg); border-top: 1px solid var(--border); }
     .year-accordion.open .year-body { display: block; }
     .subject-item { padding: 8px 10px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; margin-top: 4px; font-size: 0.85em; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
     .subject-item:hover, .subject-item.active { border-color: var(--accent); background: var(--card-inner); }
-    .courses-content { flex: 1; padding: 32px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; position: relative; }
+    .courses-content { flex: 1; padding: 32px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; }
     .courses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; width: 100%; max-width: 1000px; margin-top: 20px; }
     .course-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px; position: relative; display: flex; flex-direction: column; justify-content: space-between; }
-    .course-card-tag { font-size: 0.7em; text-transform: uppercase; color: #818cf8; font-weight: bold; margin-bottom: 4px; }
-    .course-card-title { font-size: 1em; font-weight: 600; color: #fff; margin-bottom: 6px; }
-    .course-card-desc { font-size: 0.8em; color: var(--text-muted); white-space: pre-wrap; max-height: 100px; overflow: hidden; text-overflow: ellipsis; }
     .del-btn-icon { background: transparent; border: none; color: var(--danger); cursor: pointer; font-size: 0.85em; opacity: 0.7; }
-    .del-btn-icon:hover { opacity: 1; }
 
     /* TO-DO */
     .todo-layout { width: 100%; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; max-width: 1100px; margin: 0 auto; }
@@ -137,12 +128,12 @@
     .progress-bar-bg { width: 100%; height: 10px; background: var(--bg-dark); border-radius: 5px; overflow: hidden; margin-top: 10px; border: 1px solid var(--border); }
     .progress-bar-fill { height: 100%; background: var(--accent-gradient); width: 0%; transition: width 0.3s; }
     .todo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
-    .todo-card { background: var(--panel-bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px; position: relative; }
-    .todo-card-title { font-size: 0.9em; font-weight: bold; color: #38bdf8; text-transform: uppercase; margin-bottom: 10px; display: flex; justify-content: space-between; }
-    .todo-item { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; font-size: 0.85em; }
-    .todo-item-left { display: flex; align-items: center; gap: 8px; }
-    .todo-item input { accent-color: var(--green); cursor: pointer; }
-    .todo-item.completed span { text-decoration: line-through; color: var(--text-muted); }
+    .todo-card { background: var(--panel-bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+
+    /* PLANTE / MODÈLES LAYOUT */
+    .presets-layout { padding: 24px; width: 100%; max-width: 1000px; margin: 0 auto; overflow-y: auto; }
+    .presets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-top: 16px; }
+    .preset-card { background: var(--panel-bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 
     /* MODALES & FORMULAIRES */
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 2000; justify-content: center; align-items: center; }
@@ -155,7 +146,6 @@
 
     .icon-preview-box { width: 36px; height: 36px; border-radius: 6px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; overflow: hidden; background: var(--card-inner); }
     .icon-preview-box img { width: 100%; height: 100%; object-fit: cover; }
-
     .search-input { width: 100%; background: var(--sidebar-left); border: 1px solid var(--border); padding: 8px 12px; border-radius: 6px; color: #fff; font-size: 0.85em; outline: none; }
   </style>
 </head>
@@ -175,6 +165,7 @@
   <!-- NAVIGATION GAUCHE -->
   <nav class="nav-sidebar">
     <button class="nav-btn active" onclick="switchView('map', this)"><span>🗺️</span>CARTE</button>
+    <button class="nav-btn" onclick="switchView('presets', this)"><span>🌿</span>PLANTES</button>
     <button class="nav-btn" onclick="switchView('shops', this)"><span>🏪</span>MARCHANDS</button>
     <button class="nav-btn" onclick="switchView('courses', this)"><span>📚</span>COURS</button>
     <button class="nav-btn" onclick="switchView('todo', this)"><span>✅</span>TO-DO</button>
@@ -199,7 +190,7 @@
 
         <div>
           <div class="section-title">Mode Carte</div>
-          <p style="font-size:0.8em; color:var(--text-muted); margin-bottom:10px;">Clique n'importe où sur la carte pour ajouter un point d'intérêt / ingrédient.</p>
+          <p style="font-size:0.8em; color:var(--text-muted); margin-bottom:10px;">Clique sur la carte pour placer une plante / un point d'intérêt.</p>
           <button class="btn-sm" style="width:100%;" onclick="startAddMarkerManual()">📍 Placer un point</button>
         </div>
 
@@ -221,7 +212,21 @@
       <div id="map-wrapper"><div id="map"></div></div>
     </div>
 
-    <!-- 2. MARCHANDS -->
+    <!-- 2. NOUVEL ONGLET : MODÈLES DE PLANTES / RESSOURCES -->
+    <div id="view-presets" class="view-content">
+      <div class="presets-layout">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <h2>🌿 Catalogues de Plantes & Ressources</h2>
+            <p style="color:var(--text-muted); font-size:0.85em; margin-top:4px;">Enregistre tes plantes ici pour les placer en 1 clic sur la carte via un menu déroulant !</p>
+          </div>
+          <button class="btn-sm" onclick="openPresetModal()">+ Ajouter une plante / ressource</button>
+        </div>
+        <div class="presets-grid" id="presets-grid"></div>
+      </div>
+    </div>
+
+    <!-- 3. MARCHANDS -->
     <div id="view-shops" class="view-content">
       <div class="shops-sidebar">
         <input type="text" class="search-input" placeholder="Rechercher un magasin...">
@@ -241,7 +246,7 @@
       </div>
     </div>
 
-    <!-- 3. COURS & NOTES -->
+    <!-- 4. COURS & NOTES -->
     <div id="view-courses" class="view-content">
       <div class="courses-layout">
         <div class="courses-sidebar">
@@ -251,13 +256,12 @@
         </div>
         <div class="courses-content">
           <h2 style="color:var(--gold); font-size:1.3em;">📜 TES COURS & FICHES</h2>
-          <p style="color:var(--text-muted); font-size:0.85em; margin-top:4px;">Sélectionne une matière à gauche ou ajoute directement tes fiches ci-dessous :</p>
           <div class="courses-grid" id="courses-grid"></div>
         </div>
       </div>
     </div>
 
-    <!-- 4. TO-DO / PROGRESSION -->
+    <!-- 5. TO-DO -->
     <div id="view-todo" class="view-content">
       <div class="todo-layout">
         <div class="progress-card">
@@ -277,25 +281,34 @@
 
   </div>
 
-  <!-- MODALE : CRÉER / ÉDITER UN POINT -->
+  <!-- MODALE : CRÉER / ÉDITER UN POINT SUR LA CARTE -->
   <div class="modal-overlay" id="marker-modal">
     <div class="modal-box">
       <h3 id="marker-modal-title">Ajouter un point sur la carte</h3>
+      
+      <!-- MENU DÉROULANT DES PLANTES PRÉ-ENREGISTRÉES -->
+      <label style="background:var(--card-inner); padding:8px; border-radius:6px; border:1px solid var(--accent);">
+        ⚡ Remplissage rapide depuis tes Plantes :
+        <select id="m-preset-select" onchange="applyPresetToMarkerForm(this.value)">
+          <option value="">-- Sélectionner une plante enregistrée --</option>
+        </select>
+      </label>
+
       <label>Nom du point / ressource
         <input type="text" id="m-name" placeholder="Ex: Fleur d'Amesève, Dragon, Entrée Grotte...">
       </label>
       <label>Catégorie / Type
-        <input type="text" id="m-category" placeholder="Ex: Ingrédient, Légal, Créature, Quête...">
+        <input type="text" id="m-category" placeholder="Ex: Ingrédient, Légal, Créature...">
       </label>
 
       <div style="display:flex; gap:10px; align-items:flex-end;">
         <label style="flex:1;">
-          Image de ton PC (PNG, JPG, SVG)
-          <input type="file" id="m-file" accept="image/*" onchange="handleImageUpload(event)">
+          Image (Chemin ou URL)
+          <input type="text" id="m-custom-img" placeholder="./image.png ou https://..." oninput="updateModalPreview()">
         </label>
         <label style="width:90px;">
           Ou Émoji
-          <input type="text" id="m-icon" placeholder="📍" value="📍" oninput="clearImageUpload()">
+          <input type="text" id="m-icon" placeholder="📍" value="📍" oninput="updateModalPreview()">
         </label>
         <div class="icon-preview-box" id="icon-preview">📍</div>
       </div>
@@ -315,9 +328,46 @@
       <label>Notes / Détails
         <textarea id="m-desc" placeholder="Ex: Repousse toutes les 2h..."></textarea>
       </label>
+
       <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:8px;">
         <button class="btn-sm btn-dark" onclick="closeMarkerModal()">Annuler</button>
         <button class="btn-sm" onclick="saveMarkerFromModal()">Enregistrer sur la carte</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODALE : AJOUTER UN MODÈLE DE PLANTE -->
+  <div class="modal-overlay" id="preset-modal">
+    <div class="modal-box">
+      <h3>Enregistrer un modèle de plante</h3>
+      <label>Nom de la plante / ressource
+        <input type="text" id="p-name" placeholder="Ex: Roselune">
+      </label>
+      <label>Catégorie
+        <input type="text" id="p-category" value="Plante / Ingrédient">
+      </label>
+      <div style="display:flex; gap:10px;">
+        <label style="flex:1;">Image (Ex: ./roselune.png)
+          <input type="text" id="p-custom-img" placeholder="./image.png">
+        </label>
+        <label style="width:90px;">Ou Émoji
+          <input type="text" id="p-icon" value="🌿">
+        </label>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <label style="flex:1;">Forme
+          <select id="p-shape"><option value="circle">Cercle</option><option value="square">Carré</option></select>
+        </label>
+        <label style="flex:1;">Couleur
+          <input type="color" id="p-color" value="#10b981" style="height:35px; cursor:pointer;">
+        </label>
+      </div>
+      <label>Description par défaut
+        <textarea id="p-desc" placeholder="Propriétés magiques, temps de repousse..."></textarea>
+      </label>
+      <div style="display:flex; justify-content:flex-end; gap:8px;">
+        <button class="btn-sm btn-dark" onclick="closePresetModal()">Annuler</button>
+        <button class="btn-sm" onclick="savePresetFromModal()">Enregistrer le modèle</button>
       </div>
     </div>
   </div>
@@ -341,7 +391,7 @@
     async function hashPassword(password) {
       const msgBuffer = new TextEncoder().encode(password);
       const hashBuffer = await crypto.subcrypto ? crypto.subtle.digest('SHA-256', msgBuffer) : null;
-      if (!hashBuffer) return password; // fallback
+      if (!hashBuffer) return password;
       const hashArray = Array.from(new Uint8Array(hashBuffer));
       return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     }
@@ -353,35 +403,28 @@
       const savedHash = localStorage.getItem('appPasswordHash');
 
       if (!savedHash) {
-        // Premier démarrage : définition du mot de passe
         localStorage.setItem('appPasswordHash', hashedInput);
         document.getElementById('lock-screen').style.display = 'none';
       } else if (savedHash === hashedInput) {
-        // Déverrouillage réussi
         document.getElementById('lock-screen').style.display = 'none';
         document.getElementById('lock-error').style.display = 'none';
         document.getElementById('lock-input').value = '';
       } else {
-        // Erreur
         document.getElementById('lock-error').style.display = 'block';
       }
     }
 
-    function lockApp() {
-      document.getElementById('lock-screen').style.display = 'flex';
-    }
-
+    function lockApp() { document.getElementById('lock-screen').style.display = 'flex'; }
     function checkLockStatus() {
-      const savedHash = localStorage.getItem('appPasswordHash');
-      if (!savedHash) {
+      if (!localStorage.getItem('appPasswordHash')) {
         document.getElementById('lock-title').innerText = "🔑 Définir ton Mot de Passe";
         document.getElementById('lock-subtitle').innerText = "Choisis un mot de passe pour protéger ton accès.";
         document.getElementById('lock-btn').innerText = "Créer le mot de passe";
       }
     }
 
-    // INITIALISATION DE LA CARTE LEAFLET
-    const DEFAULT_MAP_URL = 'carte.jpg';
+    // CARTE LEAFLET
+    const DEFAULT_MAP_URL = './carte.jpg';
     let currentMapUrl = localStorage.getItem('customMapBg') || DEFAULT_MAP_URL;
 
     let map = L.map('map', { crs: L.CRS.Simple, minZoom: -2, maxZoom: 3 });
@@ -415,24 +458,28 @@
       imageOverlay = L.imageOverlay(currentMapUrl, bounds).addTo(map);
     }
 
-    // DONNÉES LOCALSTORAGE
+    // STOCKAGE LOCAL
     let mapMarkers = JSON.parse(localStorage.getItem('mapMarkers')) || [];
+    let plantPresets = JSON.parse(localStorage.getItem('plantPresets')) || [
+      { id: 1, name: "Amesève", category: "Plante", icon: "🌿", customImg: "", shape: "circle", color: "#10b981", desc: "Plante magique curative." },
+      { id: 2, name: "Luminelle", category: "Plante", icon: "🌱", customImg: "", shape: "circle", color: "#f59e0b", desc: "Brille dans le noir." }
+    ];
     let shopsData = JSON.parse(localStorage.getItem('shopsData')) || [];
     let yearsData = JSON.parse(localStorage.getItem('yearsData')) || [];
     let todosData = JSON.parse(localStorage.getItem('todosData')) || [];
 
     function saveData() {
       localStorage.setItem('mapMarkers', JSON.stringify(mapMarkers));
+      localStorage.setItem('plantPresets', JSON.stringify(plantPresets));
       localStorage.setItem('shopsData', JSON.stringify(shopsData));
       localStorage.setItem('yearsData', JSON.stringify(yearsData));
       localStorage.setItem('todosData', JSON.stringify(todosData));
     }
 
-    // GESTION MARQUEURS
+    // MARQUEURS
     let leafletMarkersGroup = L.layerGroup().addTo(map);
     let pendingLatLng = null;
     let editingMarkerId = null;
-    let customImageBase64 = null;
 
     map.on('click', function(e) {
       pendingLatLng = e.latlng;
@@ -444,55 +491,60 @@
       openMarkerModal();
     }
 
-    function handleImageUpload(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          customImageBase64 = e.target.result;
-          document.getElementById('icon-preview').innerHTML = `<img src="${customImageBase64}" />`;
-        };
-        reader.readAsDataURL(file);
+    function updateModalPreview() {
+      const img = document.getElementById('m-custom-img').value;
+      const icon = document.getElementById('m-icon').value || "📍";
+      if(img) {
+        document.getElementById('icon-preview').innerHTML = `<img src="${img}" />`;
+      } else {
+        document.getElementById('icon-preview').innerText = icon;
       }
-    }
-
-    function clearImageUpload() {
-      customImageBase64 = null;
-      document.getElementById('m-file').value = "";
-      const val = document.getElementById('m-icon').value || "📍";
-      document.getElementById('icon-preview').innerText = val;
     }
 
     function openMarkerModal(editId = null) {
       editingMarkerId = editId;
-      customImageBase64 = null;
-      document.getElementById('m-file').value = "";
+
+      // Charger le menu déroulant des plantes
+      const select = document.getElementById('m-preset-select');
+      select.innerHTML = '<option value="">-- Sélectionner une plante enregistrée --</option>';
+      plantPresets.forEach(p => {
+        select.innerHTML += `<option value="${p.id}">${p.icon || '🌿'} ${p.name}</option>`;
+      });
 
       if(editId !== null) {
         const m = mapMarkers.find(x => x.id === editId);
         document.getElementById('marker-modal-title').innerText = "Éditer le point";
         document.getElementById('m-name').value = m.name;
         document.getElementById('m-category').value = m.category;
+        document.getElementById('m-custom-img').value = m.customImg || "";
         document.getElementById('m-icon').value = m.icon || "";
         document.getElementById('m-shape').value = m.shape || "circle";
         document.getElementById('m-color').value = m.color || "#6366f1";
         document.getElementById('m-desc').value = m.desc || "";
-
-        if(m.customImg) {
-          customImageBase64 = m.customImg;
-          document.getElementById('icon-preview').innerHTML = `<img src="${m.customImg}" />`;
-        } else {
-          document.getElementById('icon-preview').innerText = m.icon || "📍";
-        }
       } else {
         document.getElementById('marker-modal-title').innerText = "Ajouter un point sur la carte";
         document.getElementById('m-name').value = "";
-        document.getElementById('m-category').value = "Ingrédient";
+        document.getElementById('m-category').value = "Plante";
+        document.getElementById('m-custom-img').value = "";
         document.getElementById('m-icon').value = "📍";
         document.getElementById('m-desc').value = "";
-        document.getElementById('icon-preview').innerText = "📍";
       }
+      updateModalPreview();
       document.getElementById('marker-modal').classList.add('active');
+    }
+
+    function applyPresetToMarkerForm(presetId) {
+      if(!presetId) return;
+      const p = plantPresets.find(x => x.id == presetId);
+      if(!p) return;
+      document.getElementById('m-name').value = p.name;
+      document.getElementById('m-category').value = p.category;
+      document.getElementById('m-custom-img').value = p.customImg || "";
+      document.getElementById('m-icon').value = p.icon || "🌿";
+      document.getElementById('m-shape').value = p.shape || "circle";
+      document.getElementById('m-color').value = p.color || "#10b981";
+      document.getElementById('m-desc').value = p.desc || "";
+      updateModalPreview();
     }
 
     function closeMarkerModal() {
@@ -503,6 +555,7 @@
     function saveMarkerFromModal() {
       const name = document.getElementById('m-name').value || "Point d'intérêt";
       const category = document.getElementById('m-category').value || "Général";
+      const customImg = document.getElementById('m-custom-img').value;
       const icon = document.getElementById('m-icon').value || "📍";
       const shape = document.getElementById('m-shape').value;
       const color = document.getElementById('m-color').value;
@@ -511,19 +564,14 @@
       if(editingMarkerId !== null) {
         const idx = mapMarkers.findIndex(x => x.id === editingMarkerId);
         if(idx !== -1) {
-          mapMarkers[idx] = { 
-            ...mapMarkers[idx], 
-            name, category, icon, shape, color, desc, 
-            customImg: customImageBase64 || mapMarkers[idx].customImg 
-          };
+          mapMarkers[idx] = { ...mapMarkers[idx], name, category, icon, shape, color, desc, customImg };
         }
       } else {
         const newMarker = {
           id: Date.now(),
           y: pendingLatLng ? pendingLatLng.lat : 500,
           x: pendingLatLng ? pendingLatLng.lng : 500,
-          name, category, icon, shape, color, desc,
-          customImg: customImageBase64
+          name, category, icon, shape, color, desc, customImg
         };
         mapMarkers.push(newMarker);
       }
@@ -594,6 +642,47 @@
 
     function focusOnMap(y, x) { map.setView([y, x], 1); }
 
+    // GESTION DES PRÉRÉGLAGES (PLANTES)
+    function renderPresets() {
+      const grid = document.getElementById('presets-grid');
+      grid.innerHTML = '';
+      plantPresets.forEach(p => {
+        const displayIcon = p.customImg ? `<img src="${p.customImg}" style="width:24px; height:24px; object-fit:cover; border-radius:4px;" />` : p.icon;
+        grid.innerHTML += `
+          <div class="preset-card">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div style="background:${p.color}; padding:6px; border-radius:6px; display:flex;">${displayIcon}</div>
+              <div>
+                <strong style="font-size:0.9em; color:#fff;">${p.name}</strong>
+                <div style="font-size:0.7em; color:var(--text-muted);">${p.category}</div>
+              </div>
+            </div>
+            <button class="del-btn-icon" onclick="deletePreset(${p.id})">🗑️</button>
+          </div>`;
+      });
+    }
+
+    function openPresetModal() { document.getElementById('preset-modal').classList.add('active'); }
+    function closePresetModal() { document.getElementById('preset-modal').classList.remove('active'); }
+    function savePresetFromModal() {
+      const name = document.getElementById('p-name').value;
+      if(!name) return alert("Indique un nom !");
+      const category = document.getElementById('p-category').value;
+      const customImg = document.getElementById('p-custom-img').value;
+      const icon = document.getElementById('p-icon').value || "🌿";
+      const shape = document.getElementById('p-shape').value;
+      const color = document.getElementById('p-color').value;
+      const desc = document.getElementById('p-desc').value;
+
+      plantPresets.push({ id: Date.now(), name, category, customImg, icon, shape, color, desc });
+      saveData(); renderPresets(); closePresetModal();
+      document.getElementById('p-name').value = '';
+    }
+    function deletePreset(id) {
+      plantPresets = plantPresets.filter(p => p.id !== id);
+      saveData(); renderPresets();
+    }
+
     // MARCHANDS
     let activeShopIdx = 0;
     function renderShops() {
@@ -638,7 +727,7 @@
     function editItem(iIdx) { const item = shopsData[activeShopIdx].items[iIdx]; const name = prompt("Nom de l'objet :", item.name); const buy = prompt("Prix de rachat :", item.buy); const sell = prompt("Prix de vente :", item.sell); if(name) { shopsData[activeShopIdx].items[iIdx] = { name, buy, sell }; saveData(); renderShops(); } }
     function deleteItem(iIdx) { shopsData[activeShopIdx].items.splice(iIdx, 1); saveData(); renderShops(); }
 
-    // COURS & NOTES
+    // COURS
     let selectedYearIdx = null, selectedSubIdx = null;
     function renderCourses() {
       const yearsList = document.getElementById('years-list');
@@ -672,9 +761,9 @@
             coursesGrid.innerHTML += `
               <div class="course-card">
                 <div>
-                  <div class="course-card-tag">${y.name.toUpperCase()} - ${s.name.toUpperCase()}</div>
-                  <div class="course-card-title">📖 ${c.title}</div>
-                  <div class="course-card-desc">${c.desc}</div>
+                  <div style="font-size:0.7em; text-transform:uppercase; color:#818cf8; font-weight:bold;">${y.name} - ${s.name}</div>
+                  <div style="font-size:1em; font-weight:600; color:#fff; margin-bottom:6px;">📖 ${c.title}</div>
+                  <div style="font-size:0.8em; color:var(--text-muted); white-space:pre-wrap;">${c.desc}</div>
                 </div>
                 <div style="display:flex; justify-content:flex-end; margin-top:10px;">
                   <button class="del-btn-icon" onclick="deleteCourse(${yIdx}, ${sIdx}, ${cIdx})">🗑️ Supprimer</button>
@@ -686,7 +775,7 @@
     }
 
     function addYear() { const name = prompt("Nom de l'année :"); if(name) { yearsData.push({ name, subjects: [] }); saveData(); renderCourses(); } }
-    function deleteYear(yIdx) { if(confirm("Supprimer cette année et tout son contenu ?")) { yearsData.splice(yIdx, 1); saveData(); renderCourses(); } }
+    function deleteYear(yIdx) { if(confirm("Supprimer cette année ?")) { yearsData.splice(yIdx, 1); saveData(); renderCourses(); } }
     function addSubject(yIdx) { const name = prompt("Nom de la matière :"); if(name) { yearsData[yIdx].subjects.push({ name, courses: [] }); saveData(); renderCourses(); } }
     function deleteSubject(yIdx, sIdx) { if(confirm("Supprimer cette matière ?")) { yearsData[yIdx].subjects.splice(sIdx, 1); saveData(); renderCourses(); } }
     function selectSubject(yIdx, sIdx) { selectedYearIdx = yIdx; selectedSubIdx = sIdx; openModal(); }
@@ -719,10 +808,10 @@
         let itemsHtml = cat.items.map((item, iIdx) => {
           total++; if(item.done) done++;
           return `
-            <div class="todo-item ${item.done ? 'completed' : ''}">
-              <div class="todo-item-left">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; font-size:0.85em;">
+              <div style="display:flex; align-items:center; gap:8px;">
                 <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleTodo(${cIdx}, ${iIdx})">
-                <span>${item.text}</span>
+                <span style="${item.done ? 'text-decoration:line-through; color:var(--text-muted);' : ''}">${item.text}</span>
               </div>
               <button class="del-btn-icon" onclick="deleteTodoItem(${cIdx}, ${iIdx})">🗑️</button>
             </div>`;
@@ -730,7 +819,7 @@
 
         grid.innerHTML += `
           <div class="todo-card">
-            <div class="todo-card-title">
+            <div style="font-size:0.9em; font-weight:bold; color:#38bdf8; text-transform:uppercase; margin-bottom:10px; display:flex; justify-content:space-between;">
               <span>${cat.title}</span>
               <button class="del-btn-icon" onclick="deleteTodoCategory(${cIdx})">🗑️</button>
             </div>
@@ -762,6 +851,7 @@
     window.onload = function() {
       checkLockStatus();
       renderMapMarkers();
+      renderPresets();
       renderShops();
       renderCourses();
       renderTodos();
