@@ -381,7 +381,7 @@
     }
 
     // INITIALISATION DE LA CARTE LEAFLET
-    const DEFAULT_MAP_URL = 'https://carte-magique.onrender.com/carte.png';
+    const DEFAULT_MAP_URL = 'carte.jpg';
     let currentMapUrl = localStorage.getItem('customMapBg') || DEFAULT_MAP_URL;
 
     let map = L.map('map', { crs: L.CRS.Simple, minZoom: -2, maxZoom: 3 });
