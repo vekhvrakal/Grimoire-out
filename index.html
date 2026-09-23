@@ -66,29 +66,13 @@
     .items-grid { flex: 1; padding: 20px; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; align-content: start; }
     .item-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px; position: relative; }
     .item-card-title { font-weight: bold; font-size: 0.95em; color: #fff; }
-    .price-box-container { display: flex; gap: 6px; }
-    .price-box { flex: 1; background: var(--card-inner); border: 1px solid var(--border); border-radius: 6px; padding: 6px; text-align: center; }
-    .price-label { font-size: 0.65em; color: var(--text-muted); text-transform: uppercase; }
-    .price-val { font-weight: bold; font-size: 1.1em; color: var(--gold); }
-    .card-actions { display: flex; gap: 4px; margin-top: 4px; }
-    .btn-xs { flex: 1; padding: 4px; font-size: 0.75em; background: var(--card-inner); border: 1px solid var(--border); color: var(--text); border-radius: 4px; cursor: pointer; text-align: center; }
 
     /* 3. COURS & NOTES */
     .courses-layout { display: flex; width: 100%; height: 100%; }
     .courses-sidebar { width: 300px; background: var(--panel-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 16px; gap: 12px; overflow-y: auto; }
-    .year-accordion { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 8px; }
-    .year-header { padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600; font-size: 0.9em; }
-    .year-header:hover { background: var(--card-inner); }
-    .year-body { display: none; padding: 8px; background: var(--panel-bg); border-top: 1px solid var(--border); }
-    .year-accordion.open .year-body { display: block; }
-    .subject-item { padding: 8px 10px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; margin-top: 4px; font-size: 0.85em; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-    .subject-item:hover, .subject-item.active { border-color: var(--accent); background: var(--card-inner); }
     .courses-content { flex: 1; padding: 32px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; position: relative; }
     .courses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; width: 100%; max-width: 1000px; margin-top: 20px; }
     .course-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px; position: relative; display: flex; flex-direction: column; justify-content: space-between; }
-    .course-card-tag { font-size: 0.7em; text-transform: uppercase; color: #818cf8; font-weight: bold; margin-bottom: 4px; }
-    .course-card-title { font-size: 1em; font-weight: 600; color: #fff; margin-bottom: 6px; }
-    .course-card-desc { font-size: 0.8em; color: var(--text-muted); white-space: pre-wrap; max-height: 100px; overflow: hidden; text-overflow: ellipsis; }
     .del-btn-icon { background: transparent; border: none; color: var(--danger); cursor: pointer; font-size: 0.85em; opacity: 0.7; }
     .del-btn-icon:hover { opacity: 1; }
 
@@ -98,20 +82,13 @@
     .progress-bar-bg { width: 100%; height: 10px; background: var(--bg-dark); border-radius: 5px; overflow: hidden; margin-top: 10px; border: 1px solid var(--border); }
     .progress-bar-fill { height: 100%; background: var(--accent-gradient); width: 0%; transition: width 0.3s; }
     .todo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
-    .todo-card { background: var(--panel-bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px; position: relative; }
-    .todo-card-title { font-size: 0.9em; font-weight: bold; color: #38bdf8; text-transform: uppercase; margin-bottom: 10px; display: flex; justify-content: space-between; }
-    .todo-item { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; font-size: 0.85em; }
-    .todo-item-left { display: flex; align-items: center; gap: 8px; }
-    .todo-item input { accent-color: var(--green); cursor: pointer; }
-    .todo-item.completed span { text-decoration: line-through; color: var(--text-muted); }
 
-    /* MODALE AJOUT DE POINT SUR LA CARTE */
+    /* MODALE AJOUT DE POINT */
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; justify-content: center; align-items: center; }
     .modal-overlay.active { display: flex; }
     .modal-box { background: var(--panel-bg); border: 1px solid var(--border); padding: 20px; border-radius: 10px; width: 420px; max-width: 90%; display: flex; flex-direction: column; gap: 12px; }
     .modal-box h3 { color: #fff; }
     .modal-box select, .modal-box input { width: 100%; background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; padding: 8px; color: #fff; outline: none; }
-    
     .search-input { width: 100%; background: var(--sidebar-left); border: 1px solid var(--border); padding: 8px 12px; border-radius: 6px; color: #fff; font-size: 0.85em; outline: none; }
     
     /* ÉCRAN DE VERROUILLAGE SÉCURISÉ */
@@ -208,11 +185,6 @@
           </div>
           <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill"></div></div>
         </div>
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <h2>Avancement des Cours</h2>
-          <button class="btn-sm" onclick="addTodoCategory()">+ Nouvelle matière TO-DO</button>
-        </div>
-        <div class="todo-grid" id="todo-grid"></div>
       </div>
     </div>
 
@@ -247,8 +219,8 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    // --- MOT DE PASSE (Modifiable ici) ---
-    const ADMIN_PASSWORD = "motdepassebotaniste"; // Change le mot de passe ici si tu veux
+    // --- MOT DE PASSE MIS À JOUR ---
+    const ADMIN_PASSWORD = "RoyaumeSecret!"; 
 
     function checkPassword() {
       const input = document.getElementById('password-input').value;
@@ -261,17 +233,15 @@
       }
     }
 
-    // Permettre de valider avec la touche Entrée
     document.getElementById('password-input').addEventListener('keypress', function(e) {
       if (e.key === 'Enter') checkPassword();
     });
 
-    // Si déjà connecté dans la session du navigateur
     if (sessionStorage.getItem('auth_granted') === 'true') {
       document.getElementById('lock-screen').style.display = 'none';
     }
 
-    // --- CATALOGUE DES 35 PLANTES ET MINERAIS ---
+    // --- CATALOGUE DES PLANTES ET MINERAIS ---
     const gameResources = {
       plantes: [
         { id: "corvafleur", name: "Corvafleur", image: "Corvafleur.jpg" },
@@ -310,7 +280,6 @@
     // --- CARTE LEAFLET ---
     let map = L.map('map', { crs: L.CRS.Simple, minZoom: -2, maxZoom: 3 });
     const bounds = [[0, 0], [1000, 1000]];
-    // Utilisation de carte.jpg comme demandé
     L.imageOverlay('carte.jpg', bounds).addTo(map);
     map.fitBounds(bounds);
 
@@ -437,24 +406,6 @@
       renderMapMarkers();
     }
 
-    let shopsData = JSON.parse(localStorage.getItem('shopsData')) || [];
-    let yearsData = JSON.parse(localStorage.getItem('yearsData')) || [];
-    let todosData = JSON.parse(localStorage.getItem('todosData')) || [];
-
-    function renderShops() {
-      const grid = document.getElementById('shop-items-grid');
-      if(!grid) return;
-      grid.innerHTML = '';
-      if(shopsData.length > 0 && shopsData[0].items) {
-        shopsData.items.forEach(item => {
-          grid.innerHTML += `<div class="item-card"><div class="item-card-title">${item.name}</div></div>`;
-        });
-      }
-    }
-
-    function renderCourses() {}
-    function renderTodos() {}
-
     function switchView(viewId, btn) {
       document.querySelectorAll('.view-content').forEach(e => e.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(e => e.classList.remove('active'));
@@ -465,9 +416,6 @@
 
     window.onload = function() {
       renderMapMarkers();
-      renderShops();
-      renderCourses();
-      renderTodos();
     };
   </script>
 </body>
